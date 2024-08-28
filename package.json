@@ -1,0 +1,15 @@
+{
+  "name": "ubx-parser",
+  "version": "0.0.1",
+  "description": "A Node.js wrapper around github.com/commschamp/cc.ublox.generated",
+  "main": "hello.js",
+  "private": true,
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^8.1.0"
+  },
+  "scripts": {
+    "install": "cmake-js compile",
+    "test": "node hello.js"
+  }
+}
