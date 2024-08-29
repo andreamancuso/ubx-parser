@@ -11,5 +11,8 @@
   "scripts": {
     "install": "cmake-js compile",
     "test": "node hello.js"
+  },
+  "binary": {
+    "napi_versions": [9]
   }
 }

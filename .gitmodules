@@ -1,0 +1,6 @@
+[submodule "deps/cc.ublox.generated"]
+	path = deps/cc.ublox.generated
+	url = https://github.com/commschamp/cc.ublox.generated
+[submodule "deps/comms"]
+	path = deps/comms
+	url = https://github.com/commschamp/comms.git
