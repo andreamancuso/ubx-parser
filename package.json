@@ -3,13 +3,20 @@
   "version": "0.0.1",
   "description": "A Node.js wrapper around github.com/commschamp/cc.ublox.generated",
   "main": "hello.js",
-  "private": true,
   "dependencies": {
     "bindings": "^1.5.0",
+    "cmake-js": "^7.3.0",
     "node-addon-api": "^8.1.0"
   },
   "scripts": {
     "install": "cmake-js compile",
+    "_prebuild": "prebuild --backend cmake-js --strip",
+    "_prebuild-all": "prebuild --all --backend cmake-js --strip",
     "test": "node hello.js"
+  },
+  "binary": {
+    "napi_versions": [
+      9
+    ]
   }
 }
