@@ -1,4 +1,5 @@
 build
+cmake-build-debug-cmake-js
 node_modules
 prebuilds
 .idea

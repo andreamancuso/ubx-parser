@@ -14,6 +14,10 @@ Parser::~Parser() = default;
 
 void Parser::parse(std::vector<uint8_t> bytes)
 {
+	if (bytes.empty()) {
+    	return;
+  	}
+
     processAllWithDispatch(&bytes[0], bytes.size(), m_frame, *this);
 }
 
