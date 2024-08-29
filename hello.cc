@@ -35,11 +35,14 @@ static Napi::Value AcceptByteArray(const Napi::CallbackInfo& info) {
   std::vector<uint8_t> bytes(uint8Array.Data(),
                              uint8Array.Data() + uint8Array.ElementLength());
 
-  Parser p;
+  Napi::Env env = info.Env();
+  Napi::Object obj = Napi::Object::New(env);
+
+  Parser p(&env, &obj);
 
   p.parse(bytes);
 
-  return info.Env().Undefined();
+  return obj;
 }
 
 static Napi::Value CreateByteArray(const Napi::CallbackInfo& info) {
@@ -108,33 +111,7 @@ static Napi::Value CreateByteArray(const Napi::CallbackInfo& info) {
   return byteArray;
 }
 
-// static Napi::Object Init(Napi::Env env, Napi::Object exports) {
-//   exports["AcceptByteArray"] = Napi::Function::New(env, AcceptByteArray);
-//   exports["CreateByteArray"] = Napi::Function::New(env, CreateByteArray);
-//   return exports;
-// }
-
-// NODE_API_MODULE(NODE_GYP_MODULE_NAME, Init)
-
-static Napi::String Method(const Napi::CallbackInfo& info) {
-  // Napi::Env is the opaque data structure containing the environment in which
-  // the request is being run. We will need this env when we want to create any
-  // new objects inside of the node.js environment
-  Napi::Env env = info.Env();
-
-  // Create a C++ level variable
-  std::string helloWorld = "Hello, world!";
-
-  // Return a new javascript string that we copy-construct inside of the node.js
-  // environment
-  return Napi::String::New(env, helloWorld);
-}
-
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
-  // exports.Set(Napi::String::New(env, "hello"),
-  //             Napi::Function::New(env, Method));
-
-  exports["hello"] = Napi::Function::New(env, Method);
   exports["AcceptByteArray"] = Napi::Function::New(env, AcceptByteArray);
   exports["CreateByteArray"] = Napi::Function::New(env, CreateByteArray);
 

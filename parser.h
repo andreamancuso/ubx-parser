@@ -1,5 +1,5 @@
 #include <vector>
-
+#include <napi.h>
 #include "cc_ublox/Message.h"
 #include "cc_ublox/message/NavPvt.h"
 #include "cc_ublox/message/NavPosllh.h"
@@ -25,7 +25,7 @@ class Parser
     using InNavPosLlh = cc_ublox::message::NavPosllh<InMessage>;
 
 public:
-    Parser();
+    Parser(Napi::Env* env, Napi::Object* obj);
     ~Parser();
 
     void parse(std::vector<uint8_t> bytes);
@@ -47,4 +47,6 @@ private:
     using Frame = cc_ublox::frame::UbloxFrame<InMessage, AllInMessages>;
 
     Frame m_frame;
+    Napi::Env* m_env;
+	Napi::Object* m_obj;
 };
