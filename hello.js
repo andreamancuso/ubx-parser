@@ -17,3 +17,6 @@ console.log(addon.AcceptByteArray(new Uint8Array([
     0x00, 0x00, 0x4a, 0x69
 ]))); // 'world'
 console.timeEnd();
+
+// var myModule = require("bindings")("addon");
+// module.exports = myModule; // Just reexport it
