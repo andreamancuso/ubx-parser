@@ -7,8 +7,10 @@ const addon = require('bindings')('ubx-parser');
 
 const schema = addon.schema();
 
-// Convert doName() like "NAV-PVT (ublox-8/9)" → "NavPvtUblox89"
-function sanitizeName(raw) {
+// Convert name + variant to a PascalCase interface name
+// e.g. name="NAV-PVT" variant="ublox-8/9" → "NavPvtUblox89"
+function sanitizeName(name, variant) {
+  const raw = variant ? `${name} ${variant}` : name;
   return raw
     .replace(/[()\/]/g, ' ')  // parens and slashes → spaces
     .replace(/[-_]+/g, ' ')   // dashes/underscores → spaces
@@ -22,7 +24,7 @@ function sanitizeName(raw) {
 // Convert a schema value to a TypeScript type string
 function schemaToTs(val, indent) {
   if (typeof val === 'string') {
-    // leaf types: "number", "string", "Buffer", "null"
+    // leaf types: "number", "string", "Buffer", "boolean", "null"
     return val;
   }
 
@@ -60,8 +62,9 @@ const typeNames = [];
 
 for (let i = 0; i < schema.length; i++) {
   const msg = schema[i];
-  const rawName = msg.name;
-  const tsName = sanitizeName(rawName);
+  const name = msg.name;
+  const variant = msg.variant;
+  const tsName = sanitizeName(name, variant);
   typeNames.push(tsName);
 
   const fieldKeys = Object.keys(msg.fields);
@@ -70,11 +73,14 @@ for (let i = 0; i < schema.length; i++) {
     return `  ${key}: ${tsType};`;
   });
 
+  let body = `  name: ${JSON.stringify(name)};\n`;
+  if (variant) {
+    body += `  variant: ${JSON.stringify(variant)};\n`;
+  }
+  body += fieldLines.join('\n') + (fieldLines.length ? '\n' : '');
+
   interfaces.push(
-    `export interface ${tsName} {\n` +
-    `  name: ${JSON.stringify(rawName)};\n` +
-    fieldLines.join('\n') + (fieldLines.length ? '\n' : '') +
-    `}`
+    `export interface ${tsName} {\n` + body + `}`
   );
 }
 

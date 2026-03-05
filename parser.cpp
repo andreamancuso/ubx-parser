@@ -4,11 +4,22 @@
 #include "field_visitor.h"
 #include "schema_visitor.h"
 
+static void setNameAndVariant(Napi::Env& env, Napi::Object& obj, const char* fullName) {
+    std::string full(fullName);
+    auto pos = full.rfind(" (");
+    if (pos != std::string::npos && full.back() == ')') {
+        obj.Set("name", Napi::String::New(env, full.substr(0, pos)));
+        obj.Set("variant", Napi::String::New(env, full.substr(pos + 2, full.size() - pos - 3)));
+    } else {
+        obj.Set("name", Napi::String::New(env, full));
+    }
+}
+
 // Generic handler — dispatched for all concrete message types
 template <typename TMsg>
 void Parser::handle(TMsg& msg) {
     Napi::Object msgObj = Napi::Object::New(*m_env);
-    msgObj.Set("name", Napi::String::New(*m_env, msg.doName()));
+    setNameAndVariant(*m_env, msgObj, msg.doName());
 
     FieldToJs visitor{*m_env, msgObj};
     comms::util::tupleForEach(msg.fields(), visitor);
@@ -44,7 +55,7 @@ struct MessageSchemaGen {
     void operator()() {
         TMsg msg;
         Napi::Object entry = Napi::Object::New(env);
-        entry.Set("name", Napi::String::New(env, msg.doName()));
+        setNameAndVariant(env, entry, msg.doName());
         Napi::Object fields = Napi::Object::New(env);
         SchemaFieldVisitor visitor{env, fields};
         comms::util::tupleForEach(msg.fields(), visitor);

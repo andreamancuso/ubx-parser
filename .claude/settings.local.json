@@ -4,7 +4,10 @@
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(cd:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(grep:*)",
+      "Bash(echo === MESSAGES WITH SUFFIXES ===:*)",
+      "Bash(echo === SUFFIX PATTERN BREAKDOWN ===:*)"
     ]
   }
 }

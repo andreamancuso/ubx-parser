@@ -10,7 +10,8 @@ export interface NavPosecef {
   pAcc: number;
 }
 export interface NavPosecefPoll {
-  name: "NAV-POSECEF (Poll)";
+  name: "NAV-POSECEF";
+  variant: "Poll";
 }
 export interface NavPosllh {
   name: "NAV-POSLLH";
@@ -23,7 +24,8 @@ export interface NavPosllh {
   vAcc: number;
 }
 export interface NavPosllhPoll {
-  name: "NAV-POSLLH (Poll)";
+  name: "NAV-POSLLH";
+  variant: "Poll";
 }
 export interface NavStatus {
   name: "NAV-STATUS";
@@ -46,7 +48,8 @@ export interface NavStatus {
   msss: number;
 }
 export interface NavStatusPoll {
-  name: "NAV-STATUS (Poll)";
+  name: "NAV-STATUS";
+  variant: "Poll";
 }
 export interface NavDop {
   name: "NAV-DOP";
@@ -60,7 +63,8 @@ export interface NavDop {
   eDOP: number;
 }
 export interface NavDopPoll {
-  name: "NAV-DOP (Poll)";
+  name: "NAV-DOP";
+  variant: "Poll";
 }
 export interface NavAtt {
   name: "NAV-ATT";
@@ -75,7 +79,8 @@ export interface NavAtt {
   accHeading: number;
 }
 export interface NavAttPoll {
-  name: "NAV-ATT (Poll)";
+  name: "NAV-ATT";
+  variant: "Poll";
 }
 export interface NavSol {
   name: "NAV-SOL";
@@ -98,10 +103,12 @@ export interface NavSol {
   reserved2: number;
 }
 export interface NavSolPoll {
-  name: "NAV-SOL (Poll)";
+  name: "NAV-SOL";
+  variant: "Poll";
 }
 export interface NavPvtUblox89 {
-  name: "NAV-PVT (ublox-8/9)";
+  name: "NAV-PVT";
+  variant: "ublox-8/9";
   iTOW: number;
   year: number;
   month: number;
@@ -184,7 +191,8 @@ export interface NavPvt {
   reserved3: number;
 }
 export interface NavPvtPoll {
-  name: "NAV-PVT (Poll)";
+  name: "NAV-PVT";
+  variant: "Poll";
 }
 export interface NavOdo {
   name: "NAV-ODO";
@@ -196,7 +204,8 @@ export interface NavOdo {
   distanceStd: number;
 }
 export interface NavOdoPoll {
-  name: "NAV-ODO (Poll)";
+  name: "NAV-ODO";
+  variant: "Poll";
 }
 export interface NavResetodo {
   name: "NAV-RESETODO";
@@ -210,7 +219,8 @@ export interface NavVelecef {
   sAcc: number;
 }
 export interface NavVelecefPoll {
-  name: "NAV-VELECEF (Poll)";
+  name: "NAV-VELECEF";
+  variant: "Poll";
 }
 export interface NavVelned {
   name: "NAV-VELNED";
@@ -225,7 +235,8 @@ export interface NavVelned {
   cAcc: number;
 }
 export interface NavVelnedPoll {
-  name: "NAV-VELNED (Poll)";
+  name: "NAV-VELNED";
+  variant: "Poll";
 }
 export interface NavHpposecef {
   name: "NAV-HPPOSECEF";
@@ -242,7 +253,8 @@ export interface NavHpposecef {
   pAcc: number;
 }
 export interface NavHpposecefPoll {
-  name: "NAV-HPPOSECEF (Poll)";
+  name: "NAV-HPPOSECEF";
+  variant: "Poll";
 }
 export interface NavHpposllh {
   name: "NAV-HPPOSLLH";
@@ -262,7 +274,8 @@ export interface NavHpposllh {
   vAcc: number;
 }
 export interface NavHpposllhPoll {
-  name: "NAV-HPPOSLLH (Poll)";
+  name: "NAV-HPPOSLLH";
+  variant: "Poll";
 }
 export interface NavTimegps {
   name: "NAV-TIMEGPS";
@@ -274,7 +287,8 @@ export interface NavTimegps {
   tAcc: number;
 }
 export interface NavTimegpsPoll {
-  name: "NAV-TIMEGPS (Poll)";
+  name: "NAV-TIMEGPS";
+  variant: "Poll";
 }
 export interface NavTimeutc {
   name: "NAV-TIMEUTC";
@@ -295,7 +309,8 @@ export interface NavTimeutc {
   };
 }
 export interface NavTimeutcPoll {
-  name: "NAV-TIMEUTC (Poll)";
+  name: "NAV-TIMEUTC";
+  variant: "Poll";
 }
 export interface NavClock {
   name: "NAV-CLOCK";
@@ -306,7 +321,8 @@ export interface NavClock {
   fAcc: number;
 }
 export interface NavClockPoll {
-  name: "NAV-CLOCK (Poll)";
+  name: "NAV-CLOCK";
+  variant: "Poll";
 }
 export interface NavTimeglo {
   name: "NAV-TIMEGLO";
@@ -319,7 +335,8 @@ export interface NavTimeglo {
   tAcc: number;
 }
 export interface NavTimegloPoll {
-  name: "NAV-TIMEGLO (Poll)";
+  name: "NAV-TIMEGLO";
+  variant: "Poll";
 }
 export interface NavTimebds {
   name: "NAV-TIMEBDS";
@@ -332,7 +349,8 @@ export interface NavTimebds {
   tAcc: number;
 }
 export interface NavTimebdsPoll {
-  name: "NAV-TIMEBDS (Poll)";
+  name: "NAV-TIMEBDS";
+  variant: "Poll";
 }
 export interface NavTimegal {
   name: "NAV-TIMEGAL";
@@ -345,7 +363,8 @@ export interface NavTimegal {
   tAcc: number;
 }
 export interface NavTimegalPoll {
-  name: "NAV-TIMEGAL (Poll)";
+  name: "NAV-TIMEGAL";
+  variant: "Poll";
 }
 export interface NavTimels {
   name: "NAV-TIMELS";
@@ -363,7 +382,8 @@ export interface NavTimels {
   valid: number;
 }
 export interface NavTimelsPoll {
-  name: "NAV-TIMELS (Poll)";
+  name: "NAV-TIMELS";
+  variant: "Poll";
 }
 export interface NavSvinfo {
   name: "NAV-SVINFO";
@@ -386,7 +406,8 @@ export interface NavSvinfo {
   }>;
 }
 export interface NavSvinfoPoll {
-  name: "NAV-SVINFO (Poll)";
+  name: "NAV-SVINFO";
+  variant: "Poll";
 }
 export interface NavDgps {
   name: "NAV-DGPS";
@@ -409,7 +430,8 @@ export interface NavDgps {
   }>;
 }
 export interface NavDgpsPoll {
-  name: "NAV-DGPS (Poll)";
+  name: "NAV-DGPS";
+  variant: "Poll";
 }
 export interface NavSbas {
   name: "NAV-SBAS";
@@ -433,7 +455,8 @@ export interface NavSbas {
   }>;
 }
 export interface NavSbasPoll {
-  name: "NAV-SBAS (Poll)";
+  name: "NAV-SBAS";
+  variant: "Poll";
 }
 export interface NavOrb {
   name: "NAV-ORB";
@@ -464,7 +487,8 @@ export interface NavOrb {
   }>;
 }
 export interface NavOrbPoll {
-  name: "NAV-ORB (Poll)";
+  name: "NAV-ORB";
+  variant: "Poll";
 }
 export interface NavSat {
   name: "NAV-SAT";
@@ -499,7 +523,8 @@ export interface NavSat {
   }>;
 }
 export interface NavSatPoll {
-  name: "NAV-SAT (Poll)";
+  name: "NAV-SAT";
+  variant: "Poll";
 }
 export interface NavGeofence {
   name: "NAV-GEOFENCE";
@@ -514,7 +539,8 @@ export interface NavGeofence {
   }>;
 }
 export interface NavGeofencePoll {
-  name: "NAV-GEOFENCE (Poll)";
+  name: "NAV-GEOFENCE";
+  variant: "Poll";
 }
 export interface NavSvin {
   name: "NAV-SVIN";
@@ -536,10 +562,12 @@ export interface NavSvin {
   reserved3: number;
 }
 export interface NavSvinPoll {
-  name: "NAV-SVIN (Poll)";
+  name: "NAV-SVIN";
+  variant: "Poll";
 }
 export interface NavRelposnedV1 {
-  name: "NAV-RELPOSNED (V1)";
+  name: "NAV-RELPOSNED";
+  variant: "V1";
   version: number;
   reserved1: number;
   refStationId: number;
@@ -598,7 +626,8 @@ export interface NavRelposned {
   };
 }
 export interface NavRelposnedPoll {
-  name: "NAV-RELPOSNED (Poll)";
+  name: "NAV-RELPOSNED";
+  variant: "Poll";
 }
 export interface NavSlas {
   name: "NAV-SLAS";
@@ -620,7 +649,8 @@ export interface NavSlas {
   }>;
 }
 export interface NavSlasPoll {
-  name: "NAV-SLAS (Poll)";
+  name: "NAV-SLAS";
+  variant: "Poll";
 }
 export interface NavSig {
   name: "NAV-SIG";
@@ -645,7 +675,8 @@ export interface NavSig {
   }>;
 }
 export interface NavSigPoll {
-  name: "NAV-SIG (Poll)";
+  name: "NAV-SIG";
+  variant: "Poll";
 }
 export interface NavAopstatus {
   name: "NAV-AOPSTATUS";
@@ -659,7 +690,8 @@ export interface NavAopstatus {
   reserved3: number;
 }
 export interface NavAopstatusUblox8 {
-  name: "NAV-AOPSTATUS (ublox-8)";
+  name: "NAV-AOPSTATUS";
+  variant: "ublox-8";
   iTOW: number;
   aopCfg: number;
   status: number;
@@ -668,7 +700,8 @@ export interface NavAopstatusUblox8 {
   reserved3: number;
 }
 export interface NavAopstatusPoll {
-  name: "NAV-AOPSTATUS (Poll)";
+  name: "NAV-AOPSTATUS";
+  variant: "Poll";
 }
 export interface NavEoe {
   name: "NAV-EOE";
@@ -691,7 +724,8 @@ export interface RxmRaw {
   }>;
 }
 export interface RxmRawPoll {
-  name: "RXM-RAW (Poll)";
+  name: "RXM-RAW";
+  variant: "Poll";
 }
 export interface RxmSfrb {
   name: "RXM-SFRB";
@@ -747,7 +781,8 @@ export interface RxmMeasx {
   }>;
 }
 export interface RxmMeasxPoll {
-  name: "RXM-MEASX (Poll)";
+  name: "RXM-MEASX";
+  variant: "Poll";
 }
 export interface RxmRawx {
   name: "RXM-RAWX";
@@ -776,7 +811,8 @@ export interface RxmRawx {
   }>;
 }
 export interface RxmRawxPoll {
-  name: "RXM-RAWX (Poll)";
+  name: "RXM-RAWX";
+  variant: "Poll";
 }
 export interface RxmSvsi {
   name: "RXM-SVSI";
@@ -802,7 +838,8 @@ export interface RxmSvsi {
   }>;
 }
 export interface RxmSvsiPoll {
-  name: "RXM-SVSI (Poll)";
+  name: "RXM-SVSI";
+  variant: "Poll";
 }
 export interface RxmAlm {
   name: "RXM-ALM";
@@ -811,11 +848,13 @@ export interface RxmAlm {
   dwrd: Array<number> | null;
 }
 export interface RxmAlmPollSv {
-  name: "RXM-ALM (Poll SV)";
+  name: "RXM-ALM";
+  variant: "Poll SV";
   svid: number;
 }
 export interface RxmAlmPoll {
-  name: "RXM-ALM (Poll)";
+  name: "RXM-ALM";
+  variant: "Poll";
 }
 export interface RxmEph {
   name: "RXM-EPH";
@@ -823,11 +862,13 @@ export interface RxmEph {
   how: number;
 }
 export interface RxmEphPollSv {
-  name: "RXM-EPH (Poll SV)";
+  name: "RXM-EPH";
+  variant: "Poll SV";
   svid: number;
 }
 export interface RxmEphPoll {
-  name: "RXM-EPH (Poll)";
+  name: "RXM-EPH";
+  variant: "Poll";
 }
 export interface RxmRtcm {
   name: "RXM-RTCM";
@@ -842,7 +883,8 @@ export interface RxmRtcm {
   msgType: number;
 }
 export interface RxmPmreqV0 {
-  name: "RXM-PMREQ (v0)";
+  name: "RXM-PMREQ";
+  variant: "v0";
   version: number;
   reserved1: number;
   duration: number;
@@ -855,7 +897,8 @@ export interface RxmPmreq {
   flags: number;
 }
 export interface RxmRlmLong {
-  name: "RXM-RLM (Long)";
+  name: "RXM-RLM";
+  variant: "Long";
   version: number;
   type: number;
   svid: number;
@@ -866,7 +909,8 @@ export interface RxmRlmLong {
   reserved2: number;
 }
 export interface RxmRlmShort {
-  name: "RXM-RLM (Short)";
+  name: "RXM-RLM";
+  variant: "Short";
   version: number;
   type: number;
   svid: number;
@@ -915,7 +959,8 @@ export interface RxmImes {
   }>;
 }
 export interface RxmImesPoll {
-  name: "RXM-IMES (Poll)";
+  name: "RXM-IMES";
+  variant: "Poll";
 }
 export interface InfError {
   name: "INF-ERROR";
@@ -946,7 +991,8 @@ export interface AckAck {
   MsgId: number;
 }
 export interface CfgPrtDdc {
-  name: "CFG-PRT (DDC)";
+  name: "CFG-PRT";
+  variant: "DDC";
   portId: number;
   reserved1: number;
   txReady: {
@@ -967,7 +1013,8 @@ export interface CfgPrtDdc {
   reserved3: number;
 }
 export interface CfgPrtUart {
-  name: "CFG-PRT (UART)";
+  name: "CFG-PRT";
+  variant: "UART";
   portId: number;
   reserved1: number;
   txReady: {
@@ -991,7 +1038,8 @@ export interface CfgPrtUart {
   reserved2: number;
 }
 export interface CfgPrtUsb {
-  name: "CFG-PRT (USB)";
+  name: "CFG-PRT";
+  variant: "USB";
   portId: number;
   reserved1: number;
   txReady: {
@@ -1008,7 +1056,8 @@ export interface CfgPrtUsb {
   reserved4: number;
 }
 export interface CfgPrtSpi {
-  name: "CFG-PRT (SPI)";
+  name: "CFG-PRT";
+  variant: "SPI";
   portId: number;
   reserved1: number;
   txReady: {
@@ -1031,11 +1080,13 @@ export interface CfgPrtSpi {
   reserved3: number;
 }
 export interface CfgPrtPortPoll {
-  name: "CFG-PRT (Port Poll)";
+  name: "CFG-PRT";
+  variant: "Port Poll";
   portId: number;
 }
 export interface CfgPrtPoll {
-  name: "CFG-PRT (Poll)";
+  name: "CFG-PRT";
+  variant: "Poll";
 }
 export interface CfgMsg {
   name: "CFG-MSG";
@@ -1043,12 +1094,14 @@ export interface CfgMsg {
   rates: Array<number>;
 }
 export interface CfgMsgCurrent {
-  name: "CFG-MSG (Current)";
+  name: "CFG-MSG";
+  variant: "Current";
   MsgId: number;
   rate: number;
 }
 export interface CfgMsgPoll {
-  name: "CFG-MSG (Poll)";
+  name: "CFG-MSG";
+  variant: "Poll";
   MsgId: number;
 }
 export interface CfgInf {
@@ -1058,7 +1111,8 @@ export interface CfgInf {
   infMsgMask: Array<number>;
 }
 export interface CfgInfPoll {
-  name: "CFG-INF (Poll)";
+  name: "CFG-INF";
+  variant: "Poll";
 }
 export interface CfgRst {
   name: "CFG-RST";
@@ -1081,7 +1135,8 @@ export interface CfgDat {
   scale: number;
 }
 export interface CfgDatUser {
-  name: "CFG-DAT (User)";
+  name: "CFG-DAT";
+  variant: "User";
   majA: number;
   flat: number;
   dX: number;
@@ -1093,11 +1148,13 @@ export interface CfgDatUser {
   scale: number;
 }
 export interface CfgDatStandard {
-  name: "CFG-DAT (Standard)";
+  name: "CFG-DAT";
+  variant: "Standard";
   datumNum: number;
 }
 export interface CfgDatPoll {
-  name: "CFG-DAT (Poll)";
+  name: "CFG-DAT";
+  variant: "Poll";
 }
 export interface CfgTp {
   name: "CFG-TP";
@@ -1112,7 +1169,8 @@ export interface CfgTp {
   userDelay: number;
 }
 export interface CfgTpPoll {
-  name: "CFG-TP (Poll)";
+  name: "CFG-TP";
+  variant: "Poll";
 }
 export interface CfgRate {
   name: "CFG-RATE";
@@ -1121,7 +1179,8 @@ export interface CfgRate {
   timeRef: number;
 }
 export interface CfgRatePoll {
-  name: "CFG-RATE (Poll)";
+  name: "CFG-RATE";
+  variant: "Poll";
 }
 export interface CfgCfg {
   name: "CFG-CFG";
@@ -1143,7 +1202,8 @@ export interface CfgFxn {
   baseTow: number;
 }
 export interface CfgFxnPoll {
-  name: "CFG-FXN (Poll)";
+  name: "CFG-FXN";
+  variant: "Poll";
 }
 export interface CfgRxm {
   name: "CFG-RXM";
@@ -1151,7 +1211,8 @@ export interface CfgRxm {
   lpMode: number;
 }
 export interface CfgRxmPoll {
-  name: "CFG-RXM (Poll)";
+  name: "CFG-RXM";
+  variant: "Poll";
 }
 export interface CfgEkf {
   name: "CFG-EKF";
@@ -1167,7 +1228,8 @@ export interface CfgEkf {
   tempUpdate: number;
 }
 export interface CfgEkfPoll {
-  name: "CFG-EKF (Poll)";
+  name: "CFG-EKF";
+  variant: "Poll";
 }
 export interface CfgAnt {
   name: "CFG-ANT";
@@ -1180,7 +1242,8 @@ export interface CfgAnt {
   };
 }
 export interface CfgAntPoll {
-  name: "CFG-ANT (Poll)";
+  name: "CFG-ANT";
+  variant: "Poll";
 }
 export interface CfgSbas {
   name: "CFG-SBAS";
@@ -1191,10 +1254,12 @@ export interface CfgSbas {
   scanmode1: number;
 }
 export interface CfgSbasPoll {
-  name: "CFG-SBAS (Poll)";
+  name: "CFG-SBAS";
+  variant: "Poll";
 }
 export interface CfgNmeaV1 {
-  name: "CFG-NMEA (V1)";
+  name: "CFG-NMEA";
+  variant: "V1";
   filter: number;
   nmeaVersion: number;
   numSV: number;
@@ -1208,7 +1273,8 @@ export interface CfgNmeaV1 {
   reserved1: number;
 }
 export interface CfgNmeaV0 {
-  name: "CFG-NMEA (V0)";
+  name: "CFG-NMEA";
+  variant: "V0";
   filter: number;
   nmeaVersion: number;
   numSV: number;
@@ -1227,7 +1293,8 @@ export interface CfgNmea {
   flags: number;
 }
 export interface CfgNmeaPoll {
-  name: "CFG-NMEA (Poll)";
+  name: "CFG-NMEA";
+  variant: "Poll";
 }
 export interface CfgUsb {
   name: "CFG-USB";
@@ -1242,7 +1309,8 @@ export interface CfgUsb {
   serialNumber: string;
 }
 export interface CfgUsbPoll {
-  name: "CFG-USB (Poll)";
+  name: "CFG-USB";
+  variant: "Poll";
 }
 export interface CfgTmode {
   name: "CFG-TMODE";
@@ -1255,7 +1323,8 @@ export interface CfgTmode {
   svinVarLimit: number;
 }
 export interface CfgTmodePoll {
-  name: "CFG-TMODE (Poll)";
+  name: "CFG-TMODE";
+  variant: "Poll";
 }
 export interface CfgOdo {
   name: "CFG-ODO";
@@ -1275,7 +1344,8 @@ export interface CfgOdo {
   reserved4: number;
 }
 export interface CfgOdoPoll {
-  name: "CFG-ODO (Poll)";
+  name: "CFG-ODO";
+  variant: "Poll";
 }
 export interface CfgNvs {
   name: "CFG-NVS";
@@ -1362,7 +1432,8 @@ export interface CfgNavx5 {
   useAdr: number;
 }
 export interface CfgNavx5Poll {
-  name: "CFG-NAVX5 (Poll)";
+  name: "CFG-NAVX5";
+  variant: "Poll";
 }
 export interface CfgNav5 {
   name: "CFG-NAV5";
@@ -1387,7 +1458,8 @@ export interface CfgNav5 {
   reserved2: number;
 }
 export interface CfgNav5Poll {
-  name: "CFG-NAV5 (Poll)";
+  name: "CFG-NAV5";
+  variant: "Poll";
 }
 export interface CfgTp5 {
   name: "CFG-TP5";
@@ -1413,11 +1485,13 @@ export interface CfgTp5 {
   };
 }
 export interface CfgTp5PollSelect {
-  name: "CFG-TP5 (Poll Select)";
+  name: "CFG-TP5";
+  variant: "Poll Select";
   tpIdx: number;
 }
 export interface CfgTp5Poll {
-  name: "CFG-TP5 (Poll)";
+  name: "CFG-TP5";
+  variant: "Poll";
 }
 export interface CfgPm {
   name: "CFG-PM";
@@ -1439,7 +1513,8 @@ export interface CfgPm {
   minAcqTime: number;
 }
 export interface CfgPmPoll {
-  name: "CFG-PM (Poll)";
+  name: "CFG-PM";
+  variant: "Poll";
 }
 export interface CfgRinv {
   name: "CFG-RINV";
@@ -1447,7 +1522,8 @@ export interface CfgRinv {
   data: Buffer;
 }
 export interface CfgRinvPoll {
-  name: "CFG-RINV (Poll)";
+  name: "CFG-RINV";
+  variant: "Poll";
 }
 export interface CfgItfm {
   name: "CFG-ITFM";
@@ -1464,10 +1540,12 @@ export interface CfgItfm {
   };
 }
 export interface CfgItfmPoll {
-  name: "CFG-ITFM (Poll)";
+  name: "CFG-ITFM";
+  variant: "Poll";
 }
 export interface CfgPm2V2 {
-  name: "CFG-PM2 (V2)";
+  name: "CFG-PM2";
+  variant: "V2";
   version: number;
   reserved1: number;
   maxStartupStateDur: number;
@@ -1520,7 +1598,8 @@ export interface CfgPm2 {
   reserved3: Array<number>;
 }
 export interface CfgPm2Poll {
-  name: "CFG-PM2 (Poll)";
+  name: "CFG-PM2";
+  variant: "Poll";
 }
 export interface CfgTmode2 {
   name: "CFG-TMODE2";
@@ -1538,7 +1617,8 @@ export interface CfgTmode2 {
   svinVarLimit: number;
 }
 export interface CfgTmode2Poll {
-  name: "CFG-TMODE2 (Poll)";
+  name: "CFG-TMODE2";
+  variant: "Poll";
 }
 export interface CfgGnss {
   name: "CFG-GNSS";
@@ -1559,7 +1639,8 @@ export interface CfgGnss {
   }>;
 }
 export interface CfgGnssPoll {
-  name: "CFG-GNSS (Poll)";
+  name: "CFG-GNSS";
+  variant: "Poll";
 }
 export interface CfgLogfilter {
   name: "CFG-LOGFILTER";
@@ -1571,7 +1652,8 @@ export interface CfgLogfilter {
   positionThres: number;
 }
 export interface CfgLogfilterPoll {
-  name: "CFG-LOGFILTER (Poll)";
+  name: "CFG-LOGFILTER";
+  variant: "Poll";
 }
 export interface CfgTxslot {
   name: "CFG-TXSLOT";
@@ -1593,7 +1675,8 @@ export interface CfgHnr {
   reserved1: number;
 }
 export interface CfgHnrPoll {
-  name: "CFG-HNR (Poll)";
+  name: "CFG-HNR";
+  variant: "Poll";
 }
 export interface CfgEsrc {
   name: "CFG-ESRC";
@@ -1616,7 +1699,8 @@ export interface CfgEsrc {
   }>;
 }
 export interface CfgEsrcPoll {
-  name: "CFG-ESRC (Poll)";
+  name: "CFG-ESRC";
+  variant: "Poll";
 }
 export interface CfgDosc {
   name: "CFG-DOSC";
@@ -1643,7 +1727,8 @@ export interface CfgDosc {
   }>;
 }
 export interface CfgDoscPoll {
-  name: "CFG-DOSC (Poll)";
+  name: "CFG-DOSC";
+  variant: "Poll";
 }
 export interface CfgSmgr {
   name: "CFG-SMGR";
@@ -1674,7 +1759,8 @@ export interface CfgSmgr {
   };
 }
 export interface CfgSmgrPoll {
-  name: "CFG-SMGR (Poll)";
+  name: "CFG-SMGR";
+  variant: "Poll";
 }
 export interface CfgGeofence {
   name: "CFG-GEOFENCE";
@@ -1693,7 +1779,8 @@ export interface CfgGeofence {
   }>;
 }
 export interface CfgGeofencePoll {
-  name: "CFG-GEOFENCE (Poll)";
+  name: "CFG-GEOFENCE";
+  variant: "Poll";
 }
 export interface CfgDgnss {
   name: "CFG-DGNSS";
@@ -1701,7 +1788,8 @@ export interface CfgDgnss {
   reserved1: number;
 }
 export interface CfgDgnssPoll {
-  name: "CFG-DGNSS (Poll)";
+  name: "CFG-DGNSS";
+  variant: "Poll";
 }
 export interface CfgTmode3 {
   name: "CFG-TMODE3";
@@ -1734,7 +1822,8 @@ export interface CfgTmode3 {
   reserved3: number;
 }
 export interface CfgTmode3Poll {
-  name: "CFG-TMODE3 (Poll)";
+  name: "CFG-TMODE3";
+  variant: "Poll";
 }
 export interface CfgFixseed {
   name: "CFG-FIXSEED";
@@ -1754,7 +1843,8 @@ export interface CfgPms {
   reserved1: number;
 }
 export interface CfgPmsPoll {
-  name: "CFG-PMS (Poll)";
+  name: "CFG-PMS";
+  variant: "Poll";
 }
 export interface CfgValset {
   name: "CFG-VALSET";
@@ -1777,7 +1867,8 @@ export interface CfgValget {
   }>;
 }
 export interface CfgValgetPoll {
-  name: "CFG-VALGET (Poll)";
+  name: "CFG-VALGET";
+  variant: "Poll";
   version: number;
   layer: number;
   position: number;
@@ -1795,31 +1886,36 @@ export interface CfgValdel {
   keys: Array<number>;
 }
 export interface UpdSosRestored {
-  name: "UPD-SOS (Restored)";
+  name: "UPD-SOS";
+  variant: "Restored";
   cmd: number;
   reserved1: number;
   response: number;
   reserved2: number;
 }
 export interface UpdSosAck {
-  name: "UPD-SOS (Ack)";
+  name: "UPD-SOS";
+  variant: "Ack";
   cmd: number;
   reserved1: number;
   response: number;
   reserved2: number;
 }
 export interface UpdSosClear {
-  name: "UPD-SOS (Clear)";
+  name: "UPD-SOS";
+  variant: "Clear";
   cmd: number;
   reserved1: number;
 }
 export interface UpdSosCreate {
-  name: "UPD-SOS (Create)";
+  name: "UPD-SOS";
+  variant: "Create";
   cmd: number;
   reserved1: number;
 }
 export interface UpdSosPoll {
-  name: "UPD-SOS (Poll)";
+  name: "UPD-SOS";
+  variant: "Poll";
 }
 export interface MonIo {
   name: "MON-IO";
@@ -1836,7 +1932,8 @@ export interface MonIo {
   }>;
 }
 export interface MonIoPoll {
-  name: "MON-IO (Poll)";
+  name: "MON-IO";
+  variant: "Poll";
 }
 export interface MonVer {
   name: "MON-VER";
@@ -1845,7 +1942,8 @@ export interface MonVer {
   list: Array<string>;
 }
 export interface MonVerPoll {
-  name: "MON-VER (Poll)";
+  name: "MON-VER";
+  variant: "Poll";
 }
 export interface MonMsgpp {
   name: "MON-MSGPP";
@@ -1858,7 +1956,8 @@ export interface MonMsgpp {
   skipped: Array<number>;
 }
 export interface MonMsgppPoll {
-  name: "MON-MSGPP (Poll)";
+  name: "MON-MSGPP";
+  variant: "Poll";
 }
 export interface MonRxbuf {
   name: "MON-RXBUF";
@@ -1867,7 +1966,8 @@ export interface MonRxbuf {
   peakUsage: Array<number>;
 }
 export interface MonRxbufPoll {
-  name: "MON-RXBUF (Poll)";
+  name: "MON-RXBUF";
+  variant: "Poll";
 }
 export interface MonTxbuf {
   name: "MON-TXBUF";
@@ -1884,7 +1984,8 @@ export interface MonTxbuf {
   reserved1: number;
 }
 export interface MonTxbufPoll {
-  name: "MON-TXBUF (Poll)";
+  name: "MON-TXBUF";
+  variant: "Poll";
 }
 export interface MonHw {
   name: "MON-HW";
@@ -1912,7 +2013,8 @@ export interface MonHw {
   pullL: number;
 }
 export interface MonHwPoll {
-  name: "MON-HW (Poll)";
+  name: "MON-HW";
+  variant: "Poll";
 }
 export interface MonHw2 {
   name: "MON-HW2";
@@ -1928,7 +2030,8 @@ export interface MonHw2 {
   reserved3: number;
 }
 export interface MonHw2Poll {
-  name: "MON-HW2 (Poll)";
+  name: "MON-HW2";
+  variant: "Poll";
 }
 export interface MonRxr {
   name: "MON-RXR";
@@ -1950,7 +2053,8 @@ export interface MonPatch {
   }>;
 }
 export interface MonPatchPoll {
-  name: "MON-PATCH (Poll)";
+  name: "MON-PATCH";
+  variant: "Poll";
 }
 export interface MonGnss {
   name: "MON-GNSS";
@@ -1962,7 +2066,8 @@ export interface MonGnss {
   reserved1: number;
 }
 export interface MonGnssPoll {
-  name: "MON-GNSS (Poll)";
+  name: "MON-GNSS";
+  variant: "Poll";
 }
 export interface MonSmgr {
   name: "MON-SMGR";
@@ -1985,7 +2090,8 @@ export interface MonSmgr {
   extInt1: number;
 }
 export interface MonSmgrPoll {
-  name: "MON-SMGR (Poll)";
+  name: "MON-SMGR";
+  variant: "Poll";
 }
 export interface MonSpan {
   name: "MON-SPAN";
@@ -2002,7 +2108,8 @@ export interface MonSpan {
   }>;
 }
 export interface MonSpanPoll {
-  name: "MON-SPAN (Poll)";
+  name: "MON-SPAN";
+  variant: "Poll";
 }
 export interface MonComms {
   name: "MON-COMMS";
@@ -2028,7 +2135,8 @@ export interface MonComms {
   }>;
 }
 export interface MonPatchPoll {
-  name: "MON-PATCH (Poll)";
+  name: "MON-PATCH";
+  variant: "Poll";
 }
 export interface MonHw3 {
   name: "MON-HW3";
@@ -2049,7 +2157,8 @@ export interface MonHw3 {
   }>;
 }
 export interface MonHw3Poll {
-  name: "MON-HW3 (Poll)";
+  name: "MON-HW3";
+  variant: "Poll";
 }
 export interface MonRf {
   name: "MON-RF";
@@ -2077,7 +2186,8 @@ export interface MonRf {
   }>;
 }
 export interface MonRfPoll {
-  name: "MON-RF (Poll)";
+  name: "MON-RF";
+  variant: "Poll";
 }
 export interface AidReq {
   name: "AID-REQ";
@@ -2114,7 +2224,8 @@ export interface AidIni {
   flags: number;
 }
 export interface AidIniPoll {
-  name: "AID-INI (Poll)";
+  name: "AID-INI";
+  variant: "Poll";
 }
 export interface AidHui {
   name: "AID-HUI";
@@ -2139,7 +2250,8 @@ export interface AidHui {
   flags: number;
 }
 export interface AidHuiPoll {
-  name: "AID-HUI (Poll)";
+  name: "AID-HUI";
+  variant: "Poll";
 }
 export interface AidData {
   name: "AID-DATA";
@@ -2151,11 +2263,13 @@ export interface AidAlm {
   dwrd: Array<number> | null;
 }
 export interface AidAlmPollSv {
-  name: "AID-ALM (Poll SV)";
+  name: "AID-ALM";
+  variant: "Poll SV";
   svid: number;
 }
 export interface AidAlmPoll {
-  name: "AID-ALM (Poll)";
+  name: "AID-ALM";
+  variant: "Poll";
 }
 export interface AidEph {
   name: "AID-EPH";
@@ -2163,11 +2277,13 @@ export interface AidEph {
   how: number;
 }
 export interface AidEphPollSv {
-  name: "AID-EPH (Poll SV)";
+  name: "AID-EPH";
+  variant: "Poll SV";
   svid: number;
 }
 export interface AidEphPoll {
-  name: "AID-EPH (Poll)";
+  name: "AID-EPH";
+  variant: "Poll";
 }
 export interface AidAlpsrv {
   name: "AID-ALPSRV";
@@ -2183,7 +2299,8 @@ export interface AidAlpsrv {
   data: Buffer;
 }
 export interface AidAlpsrvToServer {
-  name: "AID-ALPSRV (To Server)";
+  name: "AID-ALPSRV";
+  variant: "To Server";
   idSize: number;
   type: number;
   ofs: number;
@@ -2192,7 +2309,8 @@ export interface AidAlpsrvToServer {
   data: Array<number>;
 }
 export interface AidAopUblox8 {
-  name: "AID-AOP (ublox-8)";
+  name: "AID-AOP";
+  variant: "ublox-8";
   gnssId: number;
   svid: number;
   reserved1: number;
@@ -2209,11 +2327,13 @@ export interface AidAop {
   } | null;
 }
 export interface AidAopPollSv {
-  name: "AID-AOP (Poll SV)";
+  name: "AID-AOP";
+  variant: "Poll SV";
   svid: number;
 }
 export interface AidAopPoll {
-  name: "AID-AOP (Poll)";
+  name: "AID-AOP";
+  variant: "Poll";
 }
 export interface AidAlp {
   name: "AID-ALP";
@@ -2228,11 +2348,13 @@ export interface AidAlp {
   reserved3: number;
 }
 export interface AidAlpStatus {
-  name: "AID-ALP (Status)";
+  name: "AID-ALP";
+  variant: "Status";
   status: number;
 }
 export interface AidAlpData {
-  name: "AID-ALP (Data)";
+  name: "AID-ALP";
+  variant: "Data";
   alpData: Array<number>;
 }
 export interface TimTp {
@@ -2253,7 +2375,8 @@ export interface TimTp {
   };
 }
 export interface TimTpPoll {
-  name: "TIM-TP (Poll)";
+  name: "TIM-TP";
+  variant: "Poll";
 }
 export interface TimTm2 {
   name: "TIM-TM2";
@@ -2277,7 +2400,8 @@ export interface TimTm2 {
   accEst: number;
 }
 export interface TimTm2Poll {
-  name: "TIM-TM2 (Poll)";
+  name: "TIM-TM2";
+  variant: "Poll";
 }
 export interface TimVrfy {
   name: "TIM-VRFY";
@@ -2293,7 +2417,8 @@ export interface TimVrfy {
   reserved1: number;
 }
 export interface TimVrfyPoll {
-  name: "TIM-VRFY (Poll)";
+  name: "TIM-VRFY";
+  variant: "Poll";
 }
 export interface TimSvin {
   name: "TIM-SVIN";
@@ -2308,7 +2433,8 @@ export interface TimSvin {
   reserved1: number;
 }
 export interface TimSvinPoll {
-  name: "TIM-SVIN (Poll)";
+  name: "TIM-SVIN";
+  variant: "Poll";
 }
 export interface TimDosc {
   name: "TIM-DOSC";
@@ -2382,7 +2508,8 @@ export interface TimVcocal {
   gainVco: number;
 }
 export interface TimVcocalExtended {
-  name: "TIM-VCOCAL (Extended)";
+  name: "TIM-VCOCAL";
+  variant: "Extended";
   type: number;
   version: number;
   oscId: number;
@@ -2393,11 +2520,13 @@ export interface TimVcocalExtended {
   maxStepSize: number;
 }
 export interface TimVcocalStop {
-  name: "TIM-VCOCAL (Stop)";
+  name: "TIM-VCOCAL";
+  variant: "Stop";
   type: number;
 }
 export interface TimVcocalPoll {
-  name: "TIM-VCOCAL (Poll)";
+  name: "TIM-VCOCAL";
+  variant: "Poll";
 }
 export interface TimFchg {
   name: "TIM-FCHG";
@@ -2412,7 +2541,8 @@ export interface TimFchg {
   extRaw: number;
 }
 export interface TimFchgPoll {
-  name: "TIM-FCHG (Poll)";
+  name: "TIM-FCHG";
+  variant: "Poll";
 }
 export interface EsfMeas {
   name: "ESF-MEAS";
@@ -2431,7 +2561,8 @@ export interface EsfMeas {
   calibTtag: number | null;
 }
 export interface EsfMeasPoll {
-  name: "ESF-MEAS (Poll)";
+  name: "ESF-MEAS";
+  variant: "Poll";
 }
 export interface EsfRaw {
   name: "ESF-RAW";
@@ -2466,7 +2597,8 @@ export interface EsfStatus {
   }>;
 }
 export interface EsfStatusPoll {
-  name: "ESF-STATUS (Poll)";
+  name: "ESF-STATUS";
+  variant: "Poll";
 }
 export interface EsfIns {
   name: "ESF-INS";
@@ -2489,7 +2621,8 @@ export interface EsfIns {
   zAccel: number;
 }
 export interface EsfInsPoll {
-  name: "ESF-INS (Poll)";
+  name: "ESF-INS";
+  variant: "Poll";
 }
 export interface MgaGpsEph {
   name: "MGA-GPS-EPH";
@@ -3017,7 +3150,8 @@ export interface MgaDbd {
   data: Buffer;
 }
 export interface MgaDbdPoll {
-  name: "MGA-DBD (Poll)";
+  name: "MGA-DBD";
+  variant: "Poll";
 }
 export interface LogErase {
   name: "LOG-ERASE";
@@ -3061,7 +3195,8 @@ export interface LogInfo {
   reserved5: number;
 }
 export interface LogInfoPoll {
-  name: "LOG-INFO (Poll)";
+  name: "LOG-INFO";
+  variant: "Poll";
 }
 export interface LogRetrieve {
   name: "LOG-RETRIEVE";
@@ -3120,7 +3255,8 @@ export interface LogFindtime {
   reserved2: number;
 }
 export interface LogFindtimeResponse {
-  name: "LOG-FINDTIME (Response)";
+  name: "LOG-FINDTIME";
+  variant: "Response";
   version: number;
   type: number;
   reserved1: number;
@@ -3205,7 +3341,8 @@ export interface SecUniqid {
   uniqueId: Buffer;
 }
 export interface SecUniqidPoll {
-  name: "SEC-UNIQID (Poll)";
+  name: "SEC-UNIQID";
+  variant: "Poll";
 }
 export interface HnrPvt {
   name: "HNR-PVT";
@@ -3236,7 +3373,8 @@ export interface HnrPvt {
   reserved2: number;
 }
 export interface HnrPvtPoll {
-  name: "HNR-PVT (Poll)";
+  name: "HNR-PVT";
+  variant: "Poll";
 }
 
 export type UbxMessage =
