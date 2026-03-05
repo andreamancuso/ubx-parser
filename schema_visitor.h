@@ -14,14 +14,33 @@ struct SchemaFieldVisitor {
     template <typename TField>
     void operator()(TField& field) {
         using Tag = typename std::decay_t<TField>::CommsTag;
-        auto schema = toSchema(field, Tag{});
         const char* fieldName = field.name();
         if (fieldName && fieldName[0] != '\0') {
-            obj.Set(Napi::String::New(env, fieldName), schema);
+            obj.Set(Napi::String::New(env, fieldName), toSchema(field, Tag{}));
+        } else {
+            expandBitmask(field, Tag{});
         }
     }
 
 private:
+    // Default: do nothing for non-bitmask empty-named fields
+    template <typename TField, typename TTag>
+    void expandBitmask(TField&, TTag) {}
+
+    // Bitmask with empty name: expand individual named bits
+    template <typename TField>
+    void expandBitmask(TField&, comms::field::tag::Bitmask) {
+        using F = std::decay_t<TField>;
+        constexpr auto numBits = static_cast<unsigned>(F::BitIdx_numOfValues);
+        for (unsigned i = 0; i < numBits; ++i) {
+            const char* bn = F::bitName(i);
+            if (bn && bn[0] != '\0') {
+                obj.Set(Napi::String::New(env, bn),
+                        Napi::String::New(env, "boolean"));
+            }
+        }
+    }
+
     // Int → "number"
     template <typename TField>
     Napi::Value toSchema(TField&, comms::field::tag::Int) {

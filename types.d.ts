@@ -31,6 +31,8 @@ export interface NavStatus {
   gpsFix: number;
   flags: number;
   fixStat: {
+    diffCorr: boolean;
+    carrSolnValid: boolean;
     mapMatching: number;
   };
   flags2: {
@@ -112,7 +114,10 @@ export interface NavPvtUblox89 {
   nano: number;
   fixType: number;
   flags: {
+    gnssFixOK: boolean;
+    diffSoln: boolean;
     psmState: number;
+    headVehValid: boolean;
     carrSoln: number;
   };
   flags2: number;
@@ -152,7 +157,10 @@ export interface NavPvt {
   nano: number;
   fixType: number;
   flags: {
+    gnssFixOK: boolean;
+    diffSoln: boolean;
     psmState: number;
+    headVehValid: boolean;
     carrSoln: number;
   };
   flags2: number;
@@ -280,6 +288,9 @@ export interface NavTimeutc {
   min: number;
   sec: number;
   valid: {
+    validTOW: boolean;
+    validWKN: boolean;
+    validUTC: boolean;
     utcStandard: number;
   };
 }
@@ -390,6 +401,7 @@ export interface NavDgps {
     svid: number;
     flags: {
       channel: number;
+      dgpsUsed: boolean;
     };
     ageC: number;
     prc: number;
@@ -469,8 +481,20 @@ export interface NavSat {
     prRes: number;
     flags: {
       qualityInd: number;
+      svUsed: boolean;
       health: number;
+      diffCorr: boolean;
+      smoothed: boolean;
       orbitSource: number;
+      ephAvail: boolean;
+      almAvail: boolean;
+      anoAvail: boolean;
+      aopAvail: boolean;
+      sbasCorrUsed: boolean;
+      rtcmCorrUsed: boolean;
+      prCorrUsed: boolean;
+      crCorrUsed: boolean;
+      doCorrUsed: boolean;
     };
   }>;
 }
@@ -537,7 +561,14 @@ export interface NavRelposnedV1 {
   accHeading: number;
   reserved3: number;
   flags: {
+    gnssFixOK: boolean;
+    diffSoln: boolean;
+    relPosValid: boolean;
     carrSoln: number;
+    isMoving: boolean;
+    refPosMiss: boolean;
+    refObsMiss: boolean;
+    relPosHeadingValid: boolean;
   };
 }
 export interface NavRelposned {
@@ -557,7 +588,13 @@ export interface NavRelposned {
   accE: number;
   accD: number;
   flags: {
+    gnssFixOK: boolean;
+    diffSoln: boolean;
+    relPosValid: boolean;
     carrSoln: number;
+    isMoving: boolean;
+    refPosMiss: boolean;
+    refObsMiss: boolean;
   };
 }
 export interface NavRelposnedPoll {
@@ -751,6 +788,10 @@ export interface RxmSvsi {
     svid: number;
     svFlag: {
       ura: number;
+      healthy: boolean;
+      ephVal: boolean;
+      almVal: boolean;
+      notAvail: boolean;
     };
     azim: number;
     elev: number;
@@ -792,6 +833,7 @@ export interface RxmRtcm {
   name: "RXM-RTCM";
   version: number;
   flags: {
+    crcFailed: boolean;
     msgUsed: number;
     bitsHigh: number;
   };
@@ -859,11 +901,14 @@ export interface RxmImes {
       pos2Floor: number;
       pos2Alt: number;
       pos2Acc: number;
+      pos2Valid: boolean;
     };
     lat: number;
     lon: number;
     shortIdFrame: {
       shortId: number;
+      shortValid: boolean;
+      shortBoundary: boolean;
     };
     mediumIdLSB: number;
     mediumId_2: number;
@@ -905,6 +950,8 @@ export interface CfgPrtDdc {
   portId: number;
   reserved1: number;
   txReady: {
+    en: boolean;
+    pol: boolean;
     pin: number;
     thres: number;
   };
@@ -924,6 +971,8 @@ export interface CfgPrtUart {
   portId: number;
   reserved1: number;
   txReady: {
+    en: boolean;
+    pol: boolean;
     pin: number;
     thres: number;
   };
@@ -946,6 +995,8 @@ export interface CfgPrtUsb {
   portId: number;
   reserved1: number;
   txReady: {
+    en: boolean;
+    pol: boolean;
     pin: number;
     thres: number;
   };
@@ -961,12 +1012,15 @@ export interface CfgPrtSpi {
   portId: number;
   reserved1: number;
   txReady: {
+    en: boolean;
+    pol: boolean;
     pin: number;
     thres: number;
   };
   mode: {
     reservedLow: number;
     spiMode: number;
+    flowControl: boolean;
     ffCnt: number;
     reservedHigh: number;
   };
@@ -1122,6 +1176,7 @@ export interface CfgAnt {
     pinSwitch: number;
     pinSCD: number;
     pinOCD: number;
+    reconfig: boolean;
   };
 }
 export interface CfgAntPoll {
@@ -1418,7 +1473,15 @@ export interface CfgPm2V2 {
   maxStartupStateDur: number;
   reserved2: number;
   flags: {
+    extintSel: boolean;
+    extintWake: boolean;
+    extintBackup: boolean;
+    extintInactive: boolean;
     limitPeakCurr: number;
+    waitTimeFix: boolean;
+    updateRTC: boolean;
+    updateEPH: boolean;
+    doNotEnterOff: boolean;
     mode: number;
     reserved: number;
   };
@@ -1437,7 +1500,15 @@ export interface CfgPm2 {
   maxStartupStateDur: number;
   reserved2: number;
   flags: {
+    extintSel: boolean;
+    extintWake: boolean;
+    extintBackup: boolean;
+    extintInactive: boolean;
     limitPeakCurr: number;
+    waitTimeFix: boolean;
+    updateRTC: boolean;
+    updateEPH: boolean;
+    doNotEnterOff: boolean;
     mode: number;
     reserved: number;
   };
@@ -1481,6 +1552,7 @@ export interface CfgGnss {
     maxTrkCh: number;
     reserved1: number;
     flags: {
+      enable: boolean;
       sigCfgMask: number;
       reserved: number;
     };
@@ -1555,6 +1627,7 @@ export interface CfgDosc {
     oscId: number;
     reserved2: number;
     flags: {
+      isCalibrated: boolean;
       controlIf: number;
       reserved: number;
     };
@@ -1584,7 +1657,20 @@ export interface CfgSmgr {
   messageCfg: number;
   maxSlewRate: number;
   flags: {
+    disableInternal: boolean;
+    disableExternal: boolean;
+    preferenceMode: boolean;
+    enableGNSS: boolean;
+    enableEXTINT0: boolean;
+    enableEXTINT1: boolean;
+    enableHostMeasInt: boolean;
+    enableHostMeasExt: boolean;
+    useAnyFix: boolean;
+    disableMaxSlewRate: boolean;
+    issueFreqWarning: boolean;
+    issueTimeWarning: boolean;
     TPCoherent: number;
+    disableOffset: boolean;
   };
 }
 export interface CfgSmgrPoll {
@@ -1623,6 +1709,7 @@ export interface CfgTmode3 {
   reserved1: number;
   flags: {
     mode: number;
+    lla: boolean;
   };
   ecef: {
     ecefX: number;
@@ -1791,6 +1878,8 @@ export interface MonTxbuf {
   tPeakusage: number;
   errors: {
     limit: number;
+    mem: boolean;
+    alloc: boolean;
   };
   reserved1: number;
 }
@@ -1808,7 +1897,10 @@ export interface MonHw {
   aStatus: number;
   aPower: number;
   flags: {
+    rtcCalib: boolean;
+    safeBoot: boolean;
     jammingState: number;
+    xtalAbsent: boolean;
   };
   reserved1: number;
   usedMask: number;
@@ -1848,6 +1940,7 @@ export interface MonPatch {
   nEntries: number;
   list: Array<{
     patchInfo: {
+      activated: boolean;
       location: number;
       res4: number;
     };
@@ -1878,9 +1971,13 @@ export interface MonSmgr {
   iTOW: number;
   intOsc: {
     intOscState: number;
+    intOscCalib: boolean;
+    intOscDisc: boolean;
   };
   extOsc: {
     extOscState: number;
+    extOscCalib: boolean;
+    extOscDisc: boolean;
   };
   discSrc: number;
   gnss: number;
@@ -2145,7 +2242,10 @@ export interface TimTp {
   qErr: number;
   week: number;
   flags: {
+    timeBase: boolean;
+    utc: boolean;
     raim: number;
+    qErrInvalid: boolean;
   };
   refInfo: {
     timeRefGnss: number;
@@ -2159,7 +2259,13 @@ export interface TimTm2 {
   name: "TIM-TM2";
   ch: number;
   flags: {
+    mode: boolean;
+    run: boolean;
+    newFallingEdge: boolean;
     timeBase: number;
+    utc: boolean;
+    time: boolean;
+    newRisingEdge: boolean;
   };
   count: number;
   wnR: number;
@@ -2216,7 +2322,18 @@ export interface TimTos {
   gnssId: number;
   reserved1: number;
   flags: {
+    leapNow: boolean;
+    leapSoon: boolean;
+    leapPositive: boolean;
+    timeInLimit: boolean;
+    intOscInLimit: boolean;
+    extOscInLimit: boolean;
+    gnssTimeValid: boolean;
+    UTCTimeValid: boolean;
     DiscSrc: number;
+    raim: boolean;
+    cohPulse: boolean;
+    lockedPulse: boolean;
   };
   year: number;
   month: number;
@@ -2302,6 +2419,8 @@ export interface EsfMeas {
   timeTag: number;
   flags: {
     timeMarkSent: number;
+    timeMarkEdge: boolean;
+    calibTtagValid: boolean;
   };
   id: number;
   list: Array<{
@@ -2334,6 +2453,8 @@ export interface EsfStatus {
   list: Array<{
     sensStatus1: {
       type: number;
+      used: boolean;
+      ready: boolean;
     };
     sensStatus2: {
       calibStatus: number;
@@ -2351,6 +2472,12 @@ export interface EsfIns {
   name: "ESF-INS";
   bitfield0: {
     version: number;
+    xAngRateValid: boolean;
+    yAngRateValid: boolean;
+    zAngRateValid: boolean;
+    xAccelValid: boolean;
+    yAccelValid: boolean;
+    zAccelValid: boolean;
   };
   reserved1: number;
   iTOW: number;
@@ -2807,6 +2934,8 @@ export interface MgaBdsTimeUtc {
   version: number;
   ref: {
     source: number;
+    fall: boolean;
+    last: boolean;
   };
   leapSecs: number;
   year: number;
@@ -2827,6 +2956,8 @@ export interface MgaBdsTimeGnss {
   version: number;
   ref: {
     source: number;
+    fall: boolean;
+    last: boolean;
   };
   gnssId: number;
   reserved1: number;
@@ -2852,6 +2983,7 @@ export interface MgaBdsFreq {
   reserved1: number;
   flags: {
     source: number;
+    fall: boolean;
   };
   freq: number;
   freqAcc: number;
