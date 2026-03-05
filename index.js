@@ -1,7 +1,7 @@
 var addon = require('bindings')('ubx-parser');
 
-console.time();
-console.log(addon.AcceptByteArray(new Uint8Array([
+console.time('parse');
+var messages = addon.parse(new Uint8Array([
     0xb5, 0x62, 0x01, 0x07, 0x5c, 0x00, 0x58, 0xa4,
     0xaa, 0x0d, 0xe4, 0x07, 0x05, 0x0c, 0x0f, 0x29,
     0x09, 0x37, 0x16, 0x00, 0x00, 0x00, 0x6f, 0x05,
@@ -15,8 +15,11 @@ console.log(addon.AcceptByteArray(new Uint8Array([
     0x03, 0x01, 0x7e, 0x00, 0x00, 0x00, 0x0d, 0x49,
     0x4b, 0x2d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x4a, 0x69
-]))); // 'world'
-console.timeEnd();
+]));
+console.timeEnd('parse');
 
-// var myModule = require("bindings")("addon");
-// module.exports = myModule; // Just reexport it
+console.log('Parsed', messages.length, 'message(s)');
+messages.forEach(function(msg) {
+    console.log('\n' + msg.name + ':');
+    console.log(JSON.stringify(msg, null, 2));
+});
