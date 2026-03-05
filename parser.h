@@ -5,10 +5,6 @@
 #include "cc_ublox/Message.h"
 #include "cc_ublox/input/AllMessages.h"
 #include "cc_ublox/frame/UbloxFrame.h"
-#include "comms/process.h"
-#include "comms/util/Tuple.h"
-#include "field_visitor.h"
-#include "schema_visitor.h"
 
 class Parser
 {
@@ -24,34 +20,12 @@ class Parser
 public:
     Parser(Napi::Env* env) : m_env(env) {}
 
-    // Generic handler — dispatched for all concrete message types
     template <typename TMsg>
-    void handle(TMsg& msg) {
-        Napi::Object msgObj = Napi::Object::New(*m_env);
-        msgObj.Set("name", Napi::String::New(*m_env, msg.doName()));
+    void handle(TMsg& msg);
 
-        FieldToJs visitor{*m_env, msgObj};
-        comms::util::tupleForEach(msg.fields(), visitor);
+    void handle(InMessage& msg);
 
-        m_messages.push_back(msgObj);
-    }
-
-    // Catch-all for unrecognized messages
-    void handle(InMessage& msg) {
-        static_cast<void>(msg);
-    }
-
-    Napi::Array parse(const std::vector<uint8_t>& bytes) {
-        if (!bytes.empty()) {
-            comms::processAllWithDispatch(&bytes[0], bytes.size(), m_frame, *this);
-        }
-
-        Napi::Array result = Napi::Array::New(*m_env, m_messages.size());
-        for (std::size_t i = 0; i < m_messages.size(); ++i) {
-            result.Set(static_cast<uint32_t>(i), m_messages[i]);
-        }
-        return result;
-    }
+    Napi::Array parse(const std::vector<uint8_t>& bytes);
 
     static Napi::Array schema(Napi::Env& env);
 

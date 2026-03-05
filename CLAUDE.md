@@ -14,28 +14,32 @@ git submodule update --init --recursive
 npm install          # runs cmake-js compile via the install script
 
 # Rebuild after C++ changes
-npx cmake-js compile
+npm run build
+
+# Generate TypeScript definitions
+npm run generate-types
 
 # Run the test script
-node hello.js
+node index.js
 ```
+
+Note: `npm run build` requires a C++ toolchain (e.g. Visual Studio Developer Command Prompt on Windows).
 
 The build produces `build/Release/ubx-parser.node` — a native `.node` binary loaded via the `bindings` package.
 
 ## Architecture
 
-**Native addon entry point:** `hello.cc` — Registers two N-API functions:
-- `AcceptByteArray(Uint8Array)` — Takes raw UBX bytes, creates a `Parser`, returns a JS object with parsed fields (e.g. `{lon, lat}`)
-- `CreateByteArray(Array<number>)` — Converts a JS number array to a Uint8Array (utility)
+**Native addon entry point:** `ubx.cc` — Registers N-API functions:
+- `parse(Uint8Array)` — Takes raw UBX bytes, creates a `Parser`, returns an array of parsed message objects
+- `schema()` — Returns type metadata for all supported UBX messages (used by codegen)
 
-**UBX parser:** `parser.h` / `parser.cpp` — C++ class that uses the comms protocol framework to decode UBX frames. Uses handler-based dispatch: each supported message type gets a `handle()` overload that extracts fields into the N-API result object.
+**UBX parser:** `parser.h` / `parser.cpp` — C++ class that uses the comms protocol framework to decode UBX frames. Uses a generic template `handle<TMsg>()` that dispatches all ~315 concrete message types, extracting fields via `FieldToJs` visitor into N-API result objects.
 
-**Currently supported UBX messages:**
-- `NAV-PVT` — Sets `lon`/`lat` on the result object
-- `NAV-POSLLH` — Prints lon/lat to stdout (not yet wired to result object)
-- All other messages are silently ignored via the catch-all `handle(InMessage&)`
+**Field visitors:**
+- `field_visitor.h` (`FieldToJs`) — Converts comms field values to JavaScript (N-API) values
+- `schema_visitor.h` (`SchemaFieldVisitor`) — Extracts field type metadata for TypeScript codegen
 
-**To add a new UBX message type:** Add its include in `parser.h`, add the type alias (e.g. `using InNavFoo = cc_ublox::message::NavFoo<InMessage>`), add it to the `AllInMessages` tuple, and implement a `handle()` overload in `parser.cpp`.
+**Type generation:** `scripts/generate-types.js` — Calls `schema()`, converts to TypeScript interfaces, writes `types.d.ts`
 
 ## Dependencies (git submodules in `deps/`)
 
@@ -44,6 +48,8 @@ The build produces `build/Release/ubx-parser.node` — a native `.node` binary l
 
 ## Key Details
 
-- C++14 standard, N-API version 9
+- C++17 standard, N-API version 9
 - Build system: CMake via `cmake-js` (not node-gyp)
+- Precompiled headers enabled for the heavy comms/ublox headers
 - The `bindings` npm package handles finding the compiled `.node` file at runtime
+- Template-heavy code is consolidated in `parser.cpp` to minimize compile times; `parser.h` contains only declarations

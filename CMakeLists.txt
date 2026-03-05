@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.16)
 cmake_policy(SET CMP0042 NEW)
 set (CMAKE_CXX_STANDARD 17)
 
@@ -37,3 +37,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # define NAPI_VERSION
 add_definitions(-DNAPI_VERSION=9)
+
+# Precompiled headers for heavy comms/ublox headers
+target_precompile_headers(${PROJECT_NAME} PRIVATE
+    <napi.h>
+    <vector>
+    <cstdint>
+    <type_traits>
+    <string>
+    <cc_ublox/Message.h>
+    <cc_ublox/input/AllMessages.h>
+    <cc_ublox/frame/UbloxFrame.h>
+    <comms/process.h>
+    <comms/util/Tuple.h>
+    <comms/field/tag.h>
+)
