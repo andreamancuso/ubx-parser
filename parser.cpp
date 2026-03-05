@@ -33,14 +33,16 @@ void Parser::handle(InMessage& msg) {
 }
 
 Napi::Array Parser::parse(const std::vector<uint8_t>& bytes) {
+    std::size_t consumed = 0;
     if (!bytes.empty()) {
-        comms::processAllWithDispatch(&bytes[0], bytes.size(), m_frame, *this);
+        consumed = comms::processAllWithDispatch(&bytes[0], bytes.size(), m_frame, *this);
     }
 
     Napi::Array result = Napi::Array::New(*m_env, m_messages.size());
     for (std::size_t i = 0; i < m_messages.size(); ++i) {
         result.Set(static_cast<uint32_t>(i), m_messages[i]);
     }
+    result.Set("consumed", Napi::Number::New(*m_env, static_cast<double>(consumed)));
     return result;
 }
 

@@ -1,7 +1,15 @@
-var addon = require('bindings')('ubx-parser');
+const { UbxParser } = require('./lib');
 
-console.time('parse');
-var messages = addon.parse(new Uint8Array([
+const parser = new UbxParser();
+
+parser.on('message', function(msg) {
+    console.log('\n' + msg.name + (msg.variant ? ' (' + msg.variant + ')' : '') + ':');
+    console.log(JSON.stringify(msg, null, 2));
+});
+
+// Test streaming: feed data as a single chunk
+console.time('feed');
+const messages = parser.feed(new Uint8Array([
     0xb5, 0x62, 0x01, 0x07, 0x5c, 0x00, 0x58, 0xa4,
     0xaa, 0x0d, 0xe4, 0x07, 0x05, 0x0c, 0x0f, 0x29,
     0x09, 0x37, 0x16, 0x00, 0x00, 0x00, 0x6f, 0x05,
@@ -16,10 +24,16 @@ var messages = addon.parse(new Uint8Array([
     0x4b, 0x2d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x4a, 0x69
 ]));
-console.timeEnd('parse');
+console.timeEnd('feed');
 
 console.log('Parsed', messages.length, 'message(s)');
-messages.forEach(function(msg) {
-    console.log('\n' + msg.name + ':');
-    console.log(JSON.stringify(msg, null, 2));
+
+// Test one-shot static parse
+console.log('\nStatic parse test:');
+const msgs2 = UbxParser.parse(new Uint8Array([
+    0xb5, 0x62, 0x05, 0x01, 0x02, 0x00, 0x01, 0x07, 0x10, 0x39
+]));
+console.log('Static parsed', msgs2.length, 'message(s)');
+msgs2.forEach(function(msg) {
+    console.log(msg.name, msg);
 });
