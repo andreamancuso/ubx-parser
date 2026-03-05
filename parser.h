@@ -8,6 +8,7 @@
 #include "comms/process.h"
 #include "comms/util/Tuple.h"
 #include "field_visitor.h"
+#include "schema_visitor.h"
 
 class Parser
 {
@@ -51,6 +52,8 @@ public:
         }
         return result;
     }
+
+    static Napi::Array schema(Napi::Env& env);
 
 private:
     Frame m_frame;

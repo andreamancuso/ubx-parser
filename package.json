@@ -4,6 +4,7 @@
   "description": "A Node.js wrapper around github.com/commschamp/cc.ublox.generated",
   "main": "index.js",
   "dependencies": {
+    "@types/node": "^24.1.0",
     "bindings": "^1.5.0",
     "cmake-js": "^8.0.0",
     "node-addon-api": "^8.6.0"
@@ -12,7 +13,8 @@
     "install": "cmake-js compile",
     "_prebuild": "prebuild --backend cmake-js --strip",
     "_prebuild-all": "prebuild --all --backend cmake-js --strip",
-    "test": "node index.js"
+    "test": "node index.js",
+    "generate-types": "node scripts/generate-types.js"
   },
   "binary": {
     "napi_versions": [

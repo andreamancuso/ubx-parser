@@ -30,8 +30,14 @@ static Napi::Value Parse(const Napi::CallbackInfo& info) {
   return p.parse(bytes);
 }
 
+static Napi::Value Schema(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  return Parser::schema(env);
+}
+
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports["parse"] = Napi::Function::New(env, Parse);
+  exports["schema"] = Napi::Function::New(env, Schema);
   return exports;
 }
 

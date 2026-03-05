@@ -3,7 +3,8 @@
     "allow": [
       "Bash(ls:*)",
       "Bash(find:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "WebSearch"
     ]
   }
 }
