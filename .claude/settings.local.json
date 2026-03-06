@@ -7,7 +7,9 @@
       "WebSearch",
       "Bash(grep:*)",
       "Bash(echo === MESSAGES WITH SUFFIXES ===:*)",
-      "Bash(echo === SUFFIX PATTERN BREAKDOWN ===:*)"
+      "Bash(echo === SUFFIX PATTERN BREAKDOWN ===:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:nodejs.github.io)"
     ]
   }
 }

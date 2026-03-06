@@ -1,25 +1,53 @@
 {
   "name": "ubx-parser",
   "version": "0.0.1",
-  "description": "A Node.js wrapper around github.com/commschamp/cc.ublox.generated",
+  "description": "Native Node.js addon for parsing u-blox UBX binary protocol (GNSS/GPS) messages",
   "main": "lib/index.js",
+  "types": "types.d.ts",
+  "license": "MPL-2.0",
+  "author": "Andrea Mancuso",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreamancuso/ubx-parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andreamancuso/ubx-parser/issues"
+  },
+  "homepage": "https://github.com/andreamancuso/ubx-parser#readme",
+  "keywords": [
+    "ubx",
+    "ublox",
+    "u-blox",
+    "gps",
+    "gnss",
+    "parser",
+    "napi",
+    "native",
+    "binary-protocol"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "lib/",
+    "types.d.ts",
+    "prebuilds/",
+    "LICENSE"
+  ],
   "dependencies": {
+    "node-gyp-build": "^4.8.4"
+  },
+  "devDependencies": {
     "@types/node": "^24.1.0",
-    "bindings": "^1.5.0",
     "cmake-js": "^8.0.0",
     "node-addon-api": "^8.6.0"
   },
   "scripts": {
-    "install": "cmake-js compile",
     "build": "cmake-js compile",
-    "_prebuild": "prebuild --backend cmake-js --strip",
-    "_prebuild-all": "prebuild --all --backend cmake-js --strip",
+    "rebuild": "cmake-js rebuild",
     "test": "node index.js",
-    "generate-types": "node scripts/generate-types.js"
-  },
-  "binary": {
-    "napi_versions": [
-      9
-    ]
+    "generate-types": "node scripts/generate-types.js",
+    "prepublishOnly": "npm run generate-types && npm test",
+    "prepack": "npm run generate-types"
   }
 }

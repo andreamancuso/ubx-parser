@@ -3,9 +3,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const addon = require('bindings')('ubx-parser');
+const ubx = require('node-gyp-build')(path.join(__dirname, '..'));
 
-const schema = addon.schema();
+const schema = ubx.schema();
 
 // Convert name + variant to a PascalCase interface name
 // e.g. name="NAV-PVT" variant="ublox-8/9" → "NavPvtUblox89"
