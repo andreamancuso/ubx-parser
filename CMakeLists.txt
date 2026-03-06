@@ -15,6 +15,7 @@ file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp")
 
 if(MSVC)
     add_compile_options(/bigobj)
+    string(REPLACE "/O2" "/O1" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
@@ -38,17 +39,20 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # define NAPI_VERSION
 add_definitions(-DNAPI_VERSION=9)
 
-# Precompiled headers for heavy comms/ublox headers
-target_precompile_headers(${PROJECT_NAME} PRIVATE
-    <napi.h>
-    <vector>
-    <cstdint>
-    <type_traits>
-    <string>
-    <cc_ublox/Message.h>
-    <cc_ublox/input/AllMessages.h>
-    <cc_ublox/frame/UbloxFrame.h>
-    <comms/process.h>
-    <comms/util/Tuple.h>
-    <comms/field/tag.h>
-)
+# Precompiled headers for heavy comms/ublox headers (disable on memory-constrained CI)
+option(UBX_USE_PCH "Use precompiled headers" ON)
+if(UBX_USE_PCH)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        <napi.h>
+        <vector>
+        <cstdint>
+        <type_traits>
+        <string>
+        <cc_ublox/Message.h>
+        <cc_ublox/input/AllMessages.h>
+        <cc_ublox/frame/UbloxFrame.h>
+        <comms/process.h>
+        <comms/util/Tuple.h>
+        <comms/field/tag.h>
+    )
+endif()

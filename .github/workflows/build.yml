@@ -16,15 +16,19 @@ jobs:
           - os: windows-latest
             platform: win32
             arch: x64
+            cmake_extra: -- -DUBX_USE_PCH=OFF
           - os: windows-11-arm
             platform: win32
             arch: arm64
+            cmake_extra: -- -DUBX_USE_PCH=OFF
           - os: macos-14
             platform: darwin
             arch: arm64
+            cmake_extra: ''
           - os: ubuntu-latest
             platform: linux
             arch: x64
+            cmake_extra: ''
 
     runs-on: ${{ matrix.os }}
     name: Build ${{ matrix.platform }}-${{ matrix.arch }}
@@ -44,7 +48,7 @@ jobs:
         run: npm install --ignore-scripts
 
       - name: Compile native addon
-        run: npx cmake-js compile
+        run: npx cmake-js compile ${{ matrix.cmake_extra }}
 
       - name: Create prebuilds directory
         shell: bash
