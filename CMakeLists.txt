@@ -41,7 +41,7 @@ add_definitions(-DNAPI_VERSION=9)
 
 # Precompiled headers for heavy comms/ublox headers (disable on memory-constrained CI)
 option(UBX_USE_PCH "Use precompiled headers" ON)
-if(UBX_USE_PCH)
+if(UBX_USE_PCH AND NOT MSVC)
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         <napi.h>
         <vector>
