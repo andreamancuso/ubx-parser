@@ -13,9 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-11-arm
-            platform: win32
-            arch: arm64
+          # - os: windows-11-arm
+          #   platform: win32
+          #   arch: arm64
           - os: macos-14
             platform: darwin
             arch: arm64
