@@ -1,5 +1,6 @@
 build
 cmake-build-debug-cmake-js
 node_modules
-prebuilds
+prebuilds/*
+!prebuilds/win32-x64/
 .idea

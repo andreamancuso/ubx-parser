@@ -43,6 +43,7 @@
     "node-addon-api": "^8.6.0"
   },
   "scripts": {
+    "build:prebuild:win32-x64": "cmake-js compile && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-x64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-x64/node.napi.node');\"",
     "build": "cmake-js compile",
     "rebuild": "cmake-js rebuild",
     "test": "node index.js",
