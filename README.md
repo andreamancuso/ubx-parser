@@ -75,7 +75,7 @@ while ((m = log.next()) !== null) {
 log.close();
 ```
 
-`UbxLog` builds a SQLite index on first open (saved as a companion `.idx` file). Subsequent opens reuse the index for instant access. Messages are deep-parsed on demand.
+`UbxLog` builds a SQLite index on first open (saved as a companion `.idx` file). Subsequent opens reuse the index for instant access. Messages are deep-parsed on demand. During indexing, frames claiming a payload larger than 8 KB are skipped as invalid — this covers all known UBX message types.
 
 ## When to use which class
 

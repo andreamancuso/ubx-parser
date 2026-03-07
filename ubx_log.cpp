@@ -210,11 +210,8 @@ Napi::Value UbxLog::deepParseAt(Napi::Env env, const MessageEntry& entry) {
         return env.Null();
     }
 
-    // Use the existing Parser class for deep parsing
-    Parser p(&env);
-    Napi::Array result = p.parse(buf);
-    if (result.Length() > 0) {
-        return result.Get(static_cast<uint32_t>(0));
+    if (!m_parser) {
+        m_parser = std::make_unique<Parser>(nullptr);
     }
-    return env.Null();
+    return m_parser->parseOne(env, buf);
 }

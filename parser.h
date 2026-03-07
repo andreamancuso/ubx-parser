@@ -26,6 +26,7 @@ public:
     void handle(InMessage& msg);
 
     Napi::Array parse(const std::vector<uint8_t>& bytes);
+    Napi::Value parseOne(Napi::Env& env, const std::vector<uint8_t>& bytes);
 
 private:
     Frame m_frame;

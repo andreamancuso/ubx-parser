@@ -41,6 +41,13 @@ void ShallowParser::feed(const uint8_t* data, std::size_t size, int64_t fileOffs
         uint16_t payloadLen = static_cast<uint16_t>(ptr[pos + 4]) |
                               (static_cast<uint16_t>(ptr[pos + 5]) << 8);
 
+        // Sanity check: no real UBX message exceeds 8KB payload
+        constexpr uint16_t MAX_PAYLOAD_LEN = 8192;
+        if (payloadLen > MAX_PAYLOAD_LEN) {
+            pos += 2;
+            continue;
+        }
+
         // Total frame length: 2 sync + 1 class + 1 id + 2 length + payload + 2 checksum
         int32_t frameLen = 6 + static_cast<int32_t>(payloadLen) + 2;
 

@@ -6,6 +6,8 @@
 #include <cstdint>
 #include "index_db.h"
 
+class Parser;
+
 class UbxLog : public Napi::ObjectWrap<UbxLog> {
 public:
     static Napi::Object Init(Napi::Env env, Napi::Object exports);
@@ -34,6 +36,7 @@ private:
     bool ensureOpen(Napi::Env env);
 
     std::unique_ptr<IndexDb> m_db;
+    std::unique_ptr<Parser> m_parser;
     std::ifstream m_file;
     int64_t m_cursor = -1; // before first message
     bool m_ready = false;

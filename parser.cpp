@@ -34,3 +34,17 @@ Napi::Array Parser::parse(const std::vector<uint8_t>& bytes) {
     result.Set("consumed", Napi::Number::New(*m_env, static_cast<double>(consumed)));
     return result;
 }
+
+Napi::Value Parser::parseOne(Napi::Env& env, const std::vector<uint8_t>& bytes) {
+    m_env = &env;
+    m_messages.clear();
+
+    if (!bytes.empty()) {
+        comms::processAllWithDispatch(&bytes[0], bytes.size(), m_frame, *this);
+    }
+
+    if (!m_messages.empty()) {
+        return m_messages[0];
+    }
+    return env.Null();
+}
