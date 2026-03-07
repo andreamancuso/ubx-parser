@@ -12,7 +12,7 @@ endif()
 
 include_directories(${CMAKE_JS_INC})
 file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp" "schema.cpp"
-     "ubx_log.cpp" "index_worker.cpp" "shallow_parser.cpp" "index_db.cpp")
+     "ubx_log.cpp" "index_worker.cpp" "read_worker.cpp" "shallow_parser.cpp" "index_db.cpp")
 
 # SQLite amalgamation — separate C library to avoid C++ PCH conflicts
 add_library(sqlite3_lib STATIC ${DEPS}/sqlite3/sqlite3.c)

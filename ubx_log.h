@@ -1,9 +1,10 @@
 #pragma once
 
 #include <napi.h>
-#include <fstream>
 #include <memory>
 #include <cstdint>
+#include <string>
+#include <vector>
 #include "index_db.h"
 
 class Parser;
@@ -15,7 +16,10 @@ public:
     ~UbxLog();
 
     // Called by IndexWorker on completion to transfer ownership
-    void setReady(std::unique_ptr<IndexDb> db, std::ifstream&& file);
+    void setReady(std::unique_ptr<IndexDb> db, const std::string& path);
+
+    // Deep-parse a buffer of frame bytes into a JS message object (called by ReadWorker::OnOK)
+    Napi::Value deepParse(Napi::Env env, const std::vector<uint8_t>& buf);
 
 private:
     // Static factory: UbxLog.open(path) -> Promise<UbxLog>
@@ -30,14 +34,13 @@ private:
     Napi::Value Get(const Napi::CallbackInfo& info);
     Napi::Value Close(const Napi::CallbackInfo& info);
 
-    // Deep-parse: read frame bytes from file and decode via Parser
-    Napi::Value deepParseAt(Napi::Env env, const MessageEntry& entry);
+    Napi::Value queueRead(Napi::Env env, const MessageEntry& entry);
 
     bool ensureOpen(Napi::Env env);
 
     std::unique_ptr<IndexDb> m_db;
     std::unique_ptr<Parser> m_parser;
-    std::ifstream m_file;
+    std::string m_path;
     int64_t m_cursor = -1; // before first message
     bool m_ready = false;
     bool m_closed = false;

@@ -2,7 +2,6 @@
 
 #include <napi.h>
 #include <string>
-#include <fstream>
 #include <memory>
 #include "index_db.h"
 #include "shallow_parser.h"
@@ -27,5 +26,4 @@ private:
     Napi::ObjectReference m_logRef;
     std::string m_path;
     std::unique_ptr<IndexDb> m_db;
-    std::ifstream m_file;
 };

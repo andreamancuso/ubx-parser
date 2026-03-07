@@ -1,5 +1,6 @@
 #include "ubx_log.h"
 #include "index_worker.h"
+#include "read_worker.h"
 #include "parser.h"
 
 Napi::FunctionReference UbxLog::s_constructor;
@@ -26,17 +27,20 @@ Napi::Object UbxLog::Init(Napi::Env env, Napi::Object exports) {
 UbxLog::UbxLog(const Napi::CallbackInfo& info)
     : Napi::ObjectWrap<UbxLog>(info) {}
 
-UbxLog::~UbxLog() {
-    if (m_file.is_open()) {
-        m_file.close();
-    }
-}
+UbxLog::~UbxLog() {}
 
-void UbxLog::setReady(std::unique_ptr<IndexDb> db, std::ifstream&& file) {
+void UbxLog::setReady(std::unique_ptr<IndexDb> db, const std::string& path) {
     m_db = std::move(db);
-    m_file = std::move(file);
+    m_path = path;
     m_cursor = -1;
     m_ready = true;
+}
+
+Napi::Value UbxLog::deepParse(Napi::Env env, const std::vector<uint8_t>& buf) {
+    if (!m_parser) {
+        m_parser = std::make_unique<Parser>(nullptr);
+    }
+    return m_parser->parseOne(env, buf);
 }
 
 Napi::Value UbxLog::Open(const Napi::CallbackInfo& info) {
@@ -98,6 +102,17 @@ Napi::Value UbxLog::MessageTypes(const Napi::CallbackInfo& info) {
     return result;
 }
 
+Napi::Value UbxLog::queueRead(Napi::Env env, const MessageEntry& entry) {
+    Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
+    Napi::Object self = Value();
+
+    auto* worker = new ReadWorker(env, deferred, this, self,
+                                  m_path, entry.offset, entry.length);
+    worker->Queue();
+
+    return deferred.Promise();
+}
+
 Napi::Value UbxLog::Next(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
     if (!ensureOpen(env)) return env.Undefined();
@@ -117,7 +132,7 @@ Napi::Value UbxLog::Next(const Napi::CallbackInfo& info) {
     }
 
     m_cursor = entry.seq;
-    return deepParseAt(env, entry);
+    return queueRead(env, entry);
 }
 
 Napi::Value UbxLog::Prev(const Napi::CallbackInfo& info) {
@@ -139,7 +154,7 @@ Napi::Value UbxLog::Prev(const Napi::CallbackInfo& info) {
     }
 
     m_cursor = entry.seq;
-    return deepParseAt(env, entry);
+    return queueRead(env, entry);
 }
 
 Napi::Value UbxLog::Seek(const Napi::CallbackInfo& info) {
@@ -181,37 +196,11 @@ Napi::Value UbxLog::Get(const Napi::CallbackInfo& info) {
         return env.Null();
     }
 
-    return deepParseAt(env, entry);
+    return queueRead(env, entry);
 }
 
 Napi::Value UbxLog::Close(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-
-    if (m_file.is_open()) {
-        m_file.close();
-    }
     m_closed = true;
-
     return env.Undefined();
-}
-
-Napi::Value UbxLog::deepParseAt(Napi::Env env, const MessageEntry& entry) {
-    // Seek to offset and read frame bytes
-    m_file.seekg(entry.offset);
-    if (!m_file.good()) {
-        Napi::Error::New(env, "Failed to seek in file").ThrowAsJavaScriptException();
-        return env.Null();
-    }
-
-    std::vector<uint8_t> buf(static_cast<std::size_t>(entry.length));
-    m_file.read(reinterpret_cast<char*>(buf.data()), entry.length);
-    if (!m_file.good()) {
-        Napi::Error::New(env, "Failed to read from file").ThrowAsJavaScriptException();
-        return env.Null();
-    }
-
-    if (!m_parser) {
-        m_parser = std::make_unique<Parser>(nullptr);
-    }
-    return m_parser->parseOne(env, buf);
 }
