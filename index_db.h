@@ -1,10 +1,18 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include "sqlite3.h"
+
+enum QueryStmt {
+    CountAll, CountByType, MessageTypes,
+    NextAll, NextByType, PrevAll, PrevByType,
+    GetByOrdinal, GetBySeq, MinSeq, MaxSeq,
+    QueryStmt_COUNT
+};
 
 struct MessageEntry {
     int64_t seq;
@@ -72,8 +80,12 @@ private:
     // In-memory name→type_id cache (only ~176 possible UBX types)
     std::unordered_map<std::string, int64_t> m_typeMap;
 
+    // Pre-prepared query statements (mutable: const methods rebind/reset them)
+    mutable std::array<sqlite3_stmt*, QueryStmt_COUNT> m_queryStmts{};
+
     void createSchema();
     void prepareStatements();
+    void prepareQueryStatements();
     int64_t resolveTypeId(const std::string& name);
     int64_t lookupTypeId(const std::string& name) const;
     void exec(const char* sql) const;

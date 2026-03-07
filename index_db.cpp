@@ -12,6 +12,9 @@ IndexDb::IndexDb(const std::string& dbPath) {
 IndexDb::~IndexDb() {
     if (m_insertStmt) sqlite3_finalize(m_insertStmt);
     if (m_insertTypeStmt) sqlite3_finalize(m_insertTypeStmt);
+    for (auto& stmt : m_queryStmts) {
+        if (stmt) sqlite3_finalize(stmt);
+    }
     if (m_db) sqlite3_close(m_db);
 }
 
@@ -22,16 +25,21 @@ IndexDb::IndexDb(IndexDb&& other) noexcept
     , m_nextSeq(other.m_nextSeq)
     , m_nextTypeId(other.m_nextTypeId)
     , m_typeMap(std::move(other.m_typeMap))
+    , m_queryStmts(other.m_queryStmts)
 {
     other.m_db = nullptr;
     other.m_insertStmt = nullptr;
     other.m_insertTypeStmt = nullptr;
+    other.m_queryStmts.fill(nullptr);
 }
 
 IndexDb& IndexDb::operator=(IndexDb&& other) noexcept {
     if (this != &other) {
         if (m_insertStmt) sqlite3_finalize(m_insertStmt);
         if (m_insertTypeStmt) sqlite3_finalize(m_insertTypeStmt);
+        for (auto& stmt : m_queryStmts) {
+            if (stmt) sqlite3_finalize(stmt);
+        }
         if (m_db) sqlite3_close(m_db);
         m_db = other.m_db;
         m_insertStmt = other.m_insertStmt;
@@ -39,9 +47,11 @@ IndexDb& IndexDb::operator=(IndexDb&& other) noexcept {
         m_nextSeq = other.m_nextSeq;
         m_nextTypeId = other.m_nextTypeId;
         m_typeMap = std::move(other.m_typeMap);
+        m_queryStmts = other.m_queryStmts;
         other.m_db = nullptr;
         other.m_insertStmt = nullptr;
         other.m_insertTypeStmt = nullptr;
+        other.m_queryStmts.fill(nullptr);
     }
     return *this;
 }
@@ -91,6 +101,46 @@ void IndexDb::loadTypeMap() {
         m_nextSeq = sqlite3_column_int64(stmt, 0) + 1;
     }
     sqlite3_finalize(stmt);
+
+    prepareQueryStatements();
+}
+
+void IndexDb::prepareQueryStatements() {
+    auto prepare = [this](QueryStmt id, const char* sql) {
+        int rc = sqlite3_prepare_v2(m_db, sql, -1, &m_queryStmts[id], nullptr);
+        if (rc != SQLITE_OK) {
+            throw std::runtime_error(std::string("Failed to prepare query: ") + sqlite3_errmsg(m_db));
+        }
+    };
+
+    prepare(CountAll,
+        "SELECT COUNT(*) FROM messages");
+    prepare(CountByType,
+        "SELECT COUNT(*) FROM messages WHERE type_id = ?");
+    prepare(MessageTypes,
+        "SELECT name FROM message_types ORDER BY name");
+    prepare(NextAll,
+        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
+        "JOIN message_types t USING(type_id) WHERE m.seq > ? ORDER BY m.seq LIMIT 1");
+    prepare(NextByType,
+        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
+        "JOIN message_types t USING(type_id) WHERE m.type_id = ? AND m.seq > ? ORDER BY m.seq LIMIT 1");
+    prepare(PrevAll,
+        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
+        "JOIN message_types t USING(type_id) WHERE m.seq < ? ORDER BY m.seq DESC LIMIT 1");
+    prepare(PrevByType,
+        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
+        "JOIN message_types t USING(type_id) WHERE m.type_id = ? AND m.seq < ? ORDER BY m.seq DESC LIMIT 1");
+    prepare(GetByOrdinal,
+        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
+        "JOIN message_types t USING(type_id) WHERE m.type_id = ? ORDER BY m.seq LIMIT 1 OFFSET ?");
+    prepare(GetBySeq,
+        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
+        "JOIN message_types t USING(type_id) WHERE m.seq = ?");
+    prepare(MinSeq,
+        "SELECT MIN(seq) FROM messages");
+    prepare(MaxSeq,
+        "SELECT MAX(seq) FROM messages");
 }
 
 void IndexDb::prepareStatements() {
@@ -162,6 +212,8 @@ void IndexDb::finalizeIndex() {
     // Reset to safe defaults for query mode
     exec("PRAGMA synchronous = NORMAL");
     exec("PRAGMA journal_mode = WAL");
+
+    prepareQueryStatements();
 }
 
 void IndexDb::exec(const char* sql) const {
@@ -184,144 +236,111 @@ MessageEntry IndexDb::readRow(sqlite3_stmt* stmt) {
 }
 
 int64_t IndexDb::count() const {
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db, "SELECT COUNT(*) FROM messages", -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[CountAll];
+    sqlite3_reset(stmt);
     sqlite3_step(stmt);
-    int64_t result = sqlite3_column_int64(stmt, 0);
-    sqlite3_finalize(stmt);
-    return result;
+    return sqlite3_column_int64(stmt, 0);
 }
 
 int64_t IndexDb::count(const std::string& name) const {
     int64_t typeId = lookupTypeId(name);
     if (typeId < 0) return 0;
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db, "SELECT COUNT(*) FROM messages WHERE type_id = ?", -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[CountByType];
+    sqlite3_reset(stmt);
     sqlite3_bind_int64(stmt, 1, typeId);
     sqlite3_step(stmt);
-    int64_t result = sqlite3_column_int64(stmt, 0);
-    sqlite3_finalize(stmt);
-    return result;
+    return sqlite3_column_int64(stmt, 0);
 }
 
 std::vector<std::string> IndexDb::messageTypes() const {
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db,
-        "SELECT name FROM message_types ORDER BY name",
-        -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[MessageTypes];
+    sqlite3_reset(stmt);
     std::vector<std::string> types;
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         types.emplace_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
     }
-    sqlite3_finalize(stmt);
     return types;
 }
 
 bool IndexDb::next(int64_t afterSeq, MessageEntry& entry) const {
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db,
-        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
-        "JOIN message_types t USING(type_id) WHERE m.seq > ? ORDER BY m.seq LIMIT 1",
-        -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[NextAll];
+    sqlite3_reset(stmt);
     sqlite3_bind_int64(stmt, 1, afterSeq);
     bool found = (sqlite3_step(stmt) == SQLITE_ROW);
     if (found) entry = readRow(stmt);
-    sqlite3_finalize(stmt);
     return found;
 }
 
 bool IndexDb::next(const std::string& name, int64_t afterSeq, MessageEntry& entry) const {
     int64_t typeId = lookupTypeId(name);
     if (typeId < 0) return false;
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db,
-        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
-        "JOIN message_types t USING(type_id) WHERE m.type_id = ? AND m.seq > ? ORDER BY m.seq LIMIT 1",
-        -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[NextByType];
+    sqlite3_reset(stmt);
     sqlite3_bind_int64(stmt, 1, typeId);
     sqlite3_bind_int64(stmt, 2, afterSeq);
     bool found = (sqlite3_step(stmt) == SQLITE_ROW);
     if (found) entry = readRow(stmt);
-    sqlite3_finalize(stmt);
     return found;
 }
 
 bool IndexDb::prev(int64_t beforeSeq, MessageEntry& entry) const {
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db,
-        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
-        "JOIN message_types t USING(type_id) WHERE m.seq < ? ORDER BY m.seq DESC LIMIT 1",
-        -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[PrevAll];
+    sqlite3_reset(stmt);
     sqlite3_bind_int64(stmt, 1, beforeSeq);
     bool found = (sqlite3_step(stmt) == SQLITE_ROW);
     if (found) entry = readRow(stmt);
-    sqlite3_finalize(stmt);
     return found;
 }
 
 bool IndexDb::prev(const std::string& name, int64_t beforeSeq, MessageEntry& entry) const {
     int64_t typeId = lookupTypeId(name);
     if (typeId < 0) return false;
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db,
-        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
-        "JOIN message_types t USING(type_id) WHERE m.type_id = ? AND m.seq < ? ORDER BY m.seq DESC LIMIT 1",
-        -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[PrevByType];
+    sqlite3_reset(stmt);
     sqlite3_bind_int64(stmt, 1, typeId);
     sqlite3_bind_int64(stmt, 2, beforeSeq);
     bool found = (sqlite3_step(stmt) == SQLITE_ROW);
     if (found) entry = readRow(stmt);
-    sqlite3_finalize(stmt);
     return found;
 }
 
 bool IndexDb::getByOrdinal(const std::string& name, int64_t ordinal, MessageEntry& entry) const {
     int64_t typeId = lookupTypeId(name);
     if (typeId < 0) return false;
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db,
-        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
-        "JOIN message_types t USING(type_id) WHERE m.type_id = ? ORDER BY m.seq LIMIT 1 OFFSET ?",
-        -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[GetByOrdinal];
+    sqlite3_reset(stmt);
     sqlite3_bind_int64(stmt, 1, typeId);
     sqlite3_bind_int64(stmt, 2, ordinal);
     bool found = (sqlite3_step(stmt) == SQLITE_ROW);
     if (found) entry = readRow(stmt);
-    sqlite3_finalize(stmt);
     return found;
 }
 
 bool IndexDb::getBySeq(int64_t seq, MessageEntry& entry) const {
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db,
-        "SELECT m.seq, t.name, m.offset, m.length FROM messages m "
-        "JOIN message_types t USING(type_id) WHERE m.seq = ?",
-        -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[GetBySeq];
+    sqlite3_reset(stmt);
     sqlite3_bind_int64(stmt, 1, seq);
     bool found = (sqlite3_step(stmt) == SQLITE_ROW);
     if (found) entry = readRow(stmt);
-    sqlite3_finalize(stmt);
     return found;
 }
 
 int64_t IndexDb::minSeq() const {
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db, "SELECT MIN(seq) FROM messages", -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[MinSeq];
+    sqlite3_reset(stmt);
     int64_t result = -1;
     if (sqlite3_step(stmt) == SQLITE_ROW && sqlite3_column_type(stmt, 0) != SQLITE_NULL) {
         result = sqlite3_column_int64(stmt, 0);
     }
-    sqlite3_finalize(stmt);
     return result;
 }
 
 int64_t IndexDb::maxSeq() const {
-    sqlite3_stmt* stmt;
-    sqlite3_prepare_v2(m_db, "SELECT MAX(seq) FROM messages", -1, &stmt, nullptr);
+    auto* stmt = m_queryStmts[MaxSeq];
+    sqlite3_reset(stmt);
     int64_t result = -1;
     if (sqlite3_step(stmt) == SQLITE_ROW && sqlite3_column_type(stmt, 0) != SQLITE_NULL) {
         result = sqlite3_column_int64(stmt, 0);
     }
-    sqlite3_finalize(stmt);
     return result;
 }
