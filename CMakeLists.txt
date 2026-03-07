@@ -21,7 +21,15 @@ if(NOT MSVC)
     add_link_options("$<$<CONFIG:Release>:-s>")
 endif()
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
-set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    PREFIX "" SUFFIX ".node"
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN ON
+)
+if(NOT MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE -ffunction-sections -fdata-sections)
+    target_link_options(${PROJECT_NAME} PRIVATE "$<$<PLATFORM_ID:Linux>:-Wl,--gc-sections>")
+endif()
 target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB})
 
 # Include Node-API wrappers
