@@ -92,11 +92,6 @@ jobs:
       - name: List prebuilds
         run: find prebuilds -type f | sort
 
-      - name: Generate types
-        run: |
-          npx cmake-js compile
-          npm run generate-types
-
       - name: Publish to npm
         run: npm publish --provenance --access public
         env:

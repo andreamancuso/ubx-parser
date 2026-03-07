@@ -47,8 +47,6 @@
     "build": "cmake-js compile",
     "rebuild": "cmake-js rebuild",
     "test": "node index.js",
-    "generate-types": "node scripts/generate-types.js",
-    "prepublishOnly": "npm run generate-types && npm test",
-    "prepack": "npm run generate-types"
+    "generate-types": "node scripts/generate-types.js"
   }
 }
