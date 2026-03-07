@@ -14,7 +14,7 @@ include_directories(${CMAKE_JS_INC})
 file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp" "schema.cpp"
      "ubx_log.cpp" "index_worker.cpp" "shallow_parser.cpp" "index_db.cpp")
 
-# SQLite amalgamation (compiled as C)
+# SQLite amalgamation (compiled as C, vendored in deps/sqlite3/)
 set(SQLITE_SRC ${DEPS}/sqlite3/sqlite3.c)
 set_source_files_properties(${SQLITE_SRC} PROPERTIES LANGUAGE C)
 

@@ -5,5 +5,4 @@ prebuilds/*
 !prebuilds/win32-x64/
 !prebuilds/win32-arm64/
 .idea
-deps/sqlite3/
 *.idx
