@@ -1,6 +1,7 @@
 #include <napi.h>
 #include "parser.h"
 #include "schema.h"
+#include "ubx_log.h"
 
 static Napi::Value Parse(const Napi::CallbackInfo& info) {
   if (info.Length() != 1) {
@@ -39,6 +40,7 @@ static Napi::Value Schema(const Napi::CallbackInfo& info) {
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports["parse"] = Napi::Function::New(env, Parse);
   exports["schema"] = Napi::Function::New(env, Schema);
+  UbxLog::Init(env, exports);
   return exports;
 }
 

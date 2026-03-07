@@ -2,7 +2,7 @@
 
 A native Node.js addon for parsing [u-blox UBX binary protocol](https://www.u-blox.com/) messages (GNSS/GPS). Built with [node-addon-api](https://github.com/nodejs/node-addon-api) (N-API) and wraps the [CommsChampion](https://github.com/commschamp) ecosystem for protocol definitions.
 
-Supports 315+ UBX message types with sub-millisecond parsing and auto-generated TypeScript definitions.
+Supports 315+ UBX message types with sub-millisecond parsing and auto-generated TypeScript definitions. Includes two complementary classes: `UbxParser` for streaming and `UbxLog` for file-based navigation.
 
 ## Installation
 
@@ -47,6 +47,45 @@ for (const msg of messages) {
 }
 ```
 
+### File-based log reader
+
+```js
+const { UbxLog } = require('ubx-parser');
+
+const log = await UbxLog.open('recording.ubx');
+
+console.log(`Total messages: ${log.count()}`);
+console.log(`NAV-PVT count: ${log.count('NAV-PVT')}`);
+console.log(`Message types: ${log.messageTypes().join(', ')}`);
+
+// Navigate forward
+const msg = log.next('NAV-PVT');
+console.log(msg);
+
+// Get the 5th NAV-PVT message (0-based)
+const fifth = log.get('NAV-PVT', 4);
+
+// Seek to beginning and iterate
+log.seek(0);
+let m;
+while ((m = log.next()) !== null) {
+  console.log(m.name);
+}
+
+log.close();
+```
+
+`UbxLog` builds a SQLite index on first open (saved as a companion `.idx` file). Subsequent opens reuse the index for instant access. Messages are deep-parsed on demand.
+
+## When to use which class
+
+| | `UbxParser` | `UbxLog` |
+|---|---|---|
+| **Use case** | Streaming / real-time data | Post-processing log files |
+| **Input** | Byte chunks (feed incrementally) | File path |
+| **Navigation** | Forward only (event-driven) | Random access, cursor-based |
+| **Memory** | Buffers only partial frames | SQLite index + on-demand parsing |
+
 ## API
 
 ### `new UbxParser()`
@@ -69,6 +108,38 @@ Static method. Parses a complete buffer and returns all decoded messages.
 ### `UbxParser.schema(): object[]`
 
 Static method. Returns field metadata for all supported UBX message types. Used internally by the type generation script.
+
+### `UbxLog.open(filePath: string): Promise<UbxLog>`
+
+Static async factory. Opens a `.ubx` file, builds or reuses a companion `.idx` index, and resolves with a ready `UbxLog` instance.
+
+### `log.count(name?: string): number`
+
+Returns total message count, or count of a specific message type.
+
+### `log.messageTypes(): string[]`
+
+Returns an array of distinct message type names found in the file.
+
+### `log.next(name?: string): UbxMessage | null`
+
+Advances the cursor and returns the next message (optionally filtered by type). Returns `null` at end.
+
+### `log.prev(name?: string): UbxMessage | null`
+
+Moves the cursor backward and returns the previous message. Returns `null` at beginning.
+
+### `log.seek(pos: number): void`
+
+Positions the cursor. `seek(0)` resets to the beginning. `seek(-1)` moves to the end (for backward iteration with `prev()`).
+
+### `log.get(name: string, ordinal: number): UbxMessage | null`
+
+Returns the Nth message (0-based) of a given type, without affecting the cursor.
+
+### `log.close(): void`
+
+Closes the file handle.
 
 ## TypeScript
 

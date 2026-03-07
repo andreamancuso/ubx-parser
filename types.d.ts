@@ -3879,3 +3879,14 @@ export declare class UbxParser {
   static parse(data: Uint8Array): UbxMessage[];
   static schema(): object[];
 }
+
+export declare class UbxLog {
+  static open(filePath: string): Promise<UbxLog>;
+  count(name?: string): number;
+  messageTypes(): string[];
+  next(name?: string): UbxMessage | null;
+  prev(name?: string): UbxMessage | null;
+  seek(pos: number): void;
+  get(name: string, ordinal: number): UbxMessage | null;
+  close(): void;
+}

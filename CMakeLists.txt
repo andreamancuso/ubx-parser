@@ -11,16 +11,24 @@ if(MSVC AND CMAKE_JS_NODELIB_DEF AND CMAKE_JS_NODELIB_TARGET)
 endif()
 
 include_directories(${CMAKE_JS_INC})
-file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp" "schema.cpp")
+file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp" "schema.cpp"
+     "ubx_log.cpp" "index_worker.cpp" "shallow_parser.cpp" "index_db.cpp")
+
+# SQLite amalgamation (compiled as C)
+set(SQLITE_SRC ${DEPS}/sqlite3/sqlite3.c)
+set_source_files_properties(${SQLITE_SRC} PROPERTIES LANGUAGE C)
 
 if(MSVC)
     add_compile_options(/bigobj)
     string(REPLACE "/O2" "/O1" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    set_source_files_properties(${SQLITE_SRC} PROPERTIES COMPILE_FLAGS "/W0")
+else()
+    set_source_files_properties(${SQLITE_SRC} PROPERTIES COMPILE_FLAGS "-w")
 endif()
 if(NOT MSVC)
     add_link_options("$<$<CONFIG:Release>:-s>")
 endif()
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${SQLITE_SRC} ${CMAKE_JS_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     PREFIX "" SUFFIX ".node"
     CXX_VISIBILITY_PRESET hidden
@@ -45,6 +53,13 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/node_modules/node-addon-api
         ${DEPS}/comms/include
         ${DEPS}/cc.ublox.generated/include
+        ${DEPS}/sqlite3
+)
+
+# SQLite compile definitions
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+        SQLITE_THREADSAFE=0
+        SQLITE_OMIT_LOAD_EXTENSION=1
 )
 
 # define NAPI_VERSION

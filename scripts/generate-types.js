@@ -120,6 +120,17 @@ const lines = [
   '  static schema(): object[];',
   '}',
   '',
+  'export declare class UbxLog {',
+  '  static open(filePath: string): Promise<UbxLog>;',
+  '  count(name?: string): number;',
+  '  messageTypes(): string[];',
+  '  next(name?: string): UbxMessage | null;',
+  '  prev(name?: string): UbxMessage | null;',
+  '  seek(pos: number): void;',
+  '  get(name: string, ordinal: number): UbxMessage | null;',
+  '  close(): void;',
+  '}',
+  '',
 ];
 
 const outPath = path.join(__dirname, '..', 'types.d.ts');
