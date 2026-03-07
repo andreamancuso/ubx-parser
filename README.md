@@ -1,42 +1,44 @@
 # ubx-parser
 
-A native Node.js addon that parses [u-blox UBX binary protocol](https://www.u-blox.com/) messages. Built with [node-addon-api](https://github.com/nodejs/node-addon-api) (N-API) and wraps the [cc.ublox.generated](https://github.com/commschamp/cc.ublox.generated) + [comms](https://github.com/commschamp/comms) libraries.
+A native Node.js addon for parsing [u-blox UBX binary protocol](https://www.u-blox.com/) messages (GNSS/GPS). Built with [node-addon-api](https://github.com/nodejs/node-addon-api) (N-API) and wraps the [CommsChampion](https://github.com/commschamp) ecosystem for protocol definitions.
 
-Supports all ~315 UBX message types with auto-generated TypeScript definitions.
+Supports 315+ UBX message types with sub-millisecond parsing and auto-generated TypeScript definitions.
 
-## Prerequisites
-
-- Node.js (v18+)
-- C++ compiler (Visual Studio 2019+ on Windows, GCC/Clang on Linux/macOS)
-- CMake (3.16+)
-
-## Setup
+## Installation
 
 ```bash
-# Clone with submodules
-git clone --recurse-submodules <repo-url>
-cd ubx-parser
-
-# Install dependencies and compile the native addon
-npm install
+npm install ubx-parser
 ```
 
-## Build
-
-```bash
-# Rebuild after C++ changes
-npm run build
-
-# Generate TypeScript type definitions
-npm run generate-types
-```
+Prebuilt binaries are included for Windows (x64, ARM64), macOS (ARM64), and Linux (x64). No C++ compiler needed for supported platforms.
 
 ## Usage
 
-```js
-const ubx = require('ubx-parser');
+### Streaming parser
 
-const messages = ubx.parse(new Uint8Array([
+```js
+const { UbxParser } = require('ubx-parser');
+
+const parser = new UbxParser();
+
+parser.on('NAV-PVT', (msg) => {
+  console.log(`Position: ${msg.lat}, ${msg.lon}`);
+});
+
+parser.on('message', (msg) => {
+  console.log(`${msg.name}: ${JSON.stringify(msg)}`);
+});
+
+// Feed data as it arrives (handles partial messages and frame boundaries)
+parser.feed(chunk);
+```
+
+### One-shot parsing
+
+```js
+const { UbxParser } = require('ubx-parser');
+
+const messages = UbxParser.parse(new Uint8Array([
   0xb5, 0x62, 0x01, 0x07, /* ... UBX binary data ... */
 ]));
 
@@ -45,16 +47,82 @@ for (const msg of messages) {
 }
 ```
 
-### API
+## API
 
-- **`parse(data: Uint8Array): UbxMessage[]`** — Parse raw UBX binary data into an array of typed message objects. Each message has a `name` field (e.g. `"NAV-PVT (ublox-8/9)"`) and all protocol fields as properties.
+### `new UbxParser()`
 
-- **`schema(): object[]`** — Returns introspected type metadata for all supported UBX message types. Used by `generate-types` to produce TypeScript definitions.
+Creates a streaming parser instance. Extends `EventEmitter`.
+
+### `parser.feed(chunk: Uint8Array | Buffer): UbxMessage[]`
+
+Feeds raw bytes into the parser. Buffers partial messages internally and returns an array of fully parsed messages. Emits events for each parsed message.
+
+### Events
+
+- **`'message'`** `(msg: UbxMessage)` — Emitted for every parsed message.
+- **`'NAV-PVT'`**, **`'NAV-POSLLH'`**, etc. — Emitted for specific message types by name.
+
+### `UbxParser.parse(data: Uint8Array): UbxMessage[]`
+
+Static method. Parses a complete buffer and returns all decoded messages.
+
+### `UbxParser.schema(): object[]`
+
+Static method. Returns field metadata for all supported UBX message types. Used internally by the type generation script.
 
 ## TypeScript
 
-Run `npm run generate-types` after building to produce `types.d.ts` with interfaces for all ~315 message types.
+Full TypeScript definitions are included with typed interfaces for all 315+ message types and type-narrowing event listeners.
 
-## Project Status
+```ts
+import { UbxParser, NavPvtUblox89 } from 'ubx-parser';
 
-Pre-alpha. The core parsing works for all UBX message types but the API may change.
+const parser = new UbxParser();
+parser.on('NAV-PVT', (msg: NavPvtUblox89) => {
+  console.log(msg.lat, msg.lon, msg.height);
+});
+```
+
+## Platform support
+
+Prebuilt binaries are included for:
+
+| Platform | Architecture |
+|---|---|
+| Windows | x64, ARM64 |
+| macOS | ARM64 (Apple Silicon) |
+| Linux | x64 |
+
+Requires Node.js >= 18. Uses N-API v9 for ABI stability across Node.js versions.
+
+## Building from source
+
+For contributors or unsupported platforms:
+
+```bash
+# Clone with submodules
+git clone --recurse-submodules https://github.com/andreamancuso/ubx-parser.git
+cd ubx-parser
+
+# Install dependencies and compile
+npm install --ignore-scripts
+npx cmake-js compile
+
+# Regenerate TypeScript definitions
+npm run generate-types
+```
+
+Requires CMake (3.16+) and a C++ compiler with C++17 support (Visual Studio 2019+, GCC, or Clang).
+
+## Acknowledgements
+
+This project is built on top of the [CommsChampion](https://github.com/commschamp) ecosystem by [Alex Robenko](https://github.com/arobenko):
+
+- **[comms](https://github.com/commschamp/comms)** — Header-only C++ library for implementing binary communication protocols.
+- **[cc.ublox.generated](https://github.com/commschamp/cc.ublox.generated)** — Auto-generated u-blox protocol definitions for the comms framework.
+
+The CommsChampion ecosystem provides an elegant, type-safe approach to protocol implementation that made it possible to support all 315+ UBX message types with minimal hand-written code.
+
+## License
+
+MPL-2.0
