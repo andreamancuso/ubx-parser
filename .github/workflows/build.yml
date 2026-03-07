@@ -52,6 +52,10 @@ jobs:
           mkdir -p prebuilds/${{ matrix.platform }}-${{ matrix.arch }}
           cp build/Release/ubx-parser.node prebuilds/${{ matrix.platform }}-${{ matrix.arch }}/node.napi.node
 
+      - name: Binary size
+        shell: bash
+        run: ls -lh build/Release/ubx-parser.node
+
       - name: Test
         run: node index.js
 
