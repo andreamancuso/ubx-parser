@@ -10,7 +10,7 @@ Supports 315+ UBX message types with sub-millisecond parsing and auto-generated 
 npm install ubx-parser
 ```
 
-Prebuilt binaries are included for Windows (x64, ARM64), macOS (ARM64), and Linux (x64). No C++ compiler needed for supported platforms.
+Prebuilt binaries are included for Windows (x64, ARM64), macOS (ARM64), and Linux (x64, ARM64). No C++ compiler needed for supported platforms.
 
 ## Usage
 
@@ -91,9 +91,13 @@ Prebuilt binaries are included for:
 |---|---|
 | Windows | x64, ARM64 |
 | macOS | ARM64 (Apple Silicon) |
-| Linux | x64 |
+| Linux | x64, ARM64 |
 
 Requires Node.js >= 18. Uses N-API v9 for ABI stability across Node.js versions.
+
+### Help wanted
+
+So far this project has only been tested on Windows x64. Testing and feedback on other platforms (especially macOS and Linux ARM64) is very welcome. Please open an issue if you run into problems.
 
 ## Building from source
 
@@ -106,7 +110,7 @@ cd ubx-parser
 
 # Install dependencies and compile
 npm install --ignore-scripts
-npx cmake-js compile
+npm run compile
 
 # Regenerate TypeScript definitions
 npm run generate-types
@@ -114,12 +118,24 @@ npm run generate-types
 
 Requires CMake (3.16+) and a C++ compiler with C++17 support (Visual Studio 2019+, GCC, or Clang).
 
+### Windows prebuilds
+
+Windows prebuilds are compiled locally and committed to git. Run from a Developer Command Prompt:
+
+```bash
+# x64
+npm run build:prebuild:win32-x64
+
+# ARM64 (cross-compile, requires MSVC ARM64 build tools)
+npm run build:prebuild:win32-arm64
+```
+
 ## Acknowledgements
 
 This project is built on top of the [CommsChampion](https://github.com/commschamp) ecosystem by [Alex Robenko](https://github.com/arobenko):
 
-- **[comms](https://github.com/commschamp/comms)** — Header-only C++ library for implementing binary communication protocols.
-- **[cc.ublox.generated](https://github.com/commschamp/cc.ublox.generated)** — Auto-generated u-blox protocol definitions for the comms framework.
+- **[comms](https://github.com/commschamp/comms)**: Header-only C++ library for implementing binary communication protocols.
+- **[cc.ublox.generated](https://github.com/commschamp/cc.ublox.generated)**: Auto-generated u-blox protocol definitions for the comms framework.
 
 The CommsChampion ecosystem provides an elegant, type-safe approach to protocol implementation that made it possible to support all 315+ UBX message types with minimal hand-written code.
 

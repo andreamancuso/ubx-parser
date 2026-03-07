@@ -1,6 +1,6 @@
 {
   "name": "ubx-parser",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Native Node.js addon for parsing u-blox UBX binary protocol (GNSS/GPS) messages",
   "main": "lib/index.js",
   "types": "types.d.ts",
@@ -43,8 +43,9 @@
     "node-addon-api": "^8.6.0"
   },
   "scripts": {
-    "build:prebuild:win32-x64": "cmake-js compile && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-x64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-x64/node.napi.node');\"",
-    "build": "cmake-js compile",
+    "build:prebuild:win32-x64": "cmake-js rebuild && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-x64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-x64/node.napi.node');\"",
+    "build:prebuild:win32-arm64": "cmake-js rebuild --arch arm64 && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-arm64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-arm64/node.napi.node');\"",
+    "compile": "cmake-js compile",
     "rebuild": "cmake-js rebuild",
     "test": "node index.js",
     "generate-types": "node scripts/generate-types.js"
