@@ -1,19 +1,8 @@
 #include "parser.h"
+#include "ubx_common.h"
 #include "comms/process.h"
 #include "comms/util/Tuple.h"
 #include "field_visitor.h"
-#include "schema_visitor.h"
-
-static void setNameAndVariant(Napi::Env& env, Napi::Object& obj, const char* fullName) {
-    std::string full(fullName);
-    auto pos = full.rfind(" (");
-    if (pos != std::string::npos && full.back() == ')') {
-        obj.Set("name", Napi::String::New(env, full.substr(0, pos)));
-        obj.Set("variant", Napi::String::New(env, full.substr(pos + 2, full.size() - pos - 3)));
-    } else {
-        obj.Set("name", Napi::String::New(env, full));
-    }
-}
 
 // Generic handler — dispatched for all concrete message types
 template <typename TMsg>
@@ -43,32 +32,5 @@ Napi::Array Parser::parse(const std::vector<uint8_t>& bytes) {
         result.Set(static_cast<uint32_t>(i), m_messages[i]);
     }
     result.Set("consumed", Napi::Number::New(*m_env, static_cast<double>(consumed)));
-    return result;
-}
-
-// --- Schema generation ---
-
-struct MessageSchemaGen {
-    Napi::Env& env;
-    Napi::Array& result;
-    uint32_t idx = 0;
-
-    template <typename TMsg>
-    void operator()() {
-        TMsg msg;
-        Napi::Object entry = Napi::Object::New(env);
-        setNameAndVariant(env, entry, msg.doName());
-        Napi::Object fields = Napi::Object::New(env);
-        SchemaFieldVisitor visitor{env, fields};
-        comms::util::tupleForEach(msg.fields(), visitor);
-        entry.Set("fields", fields);
-        result.Set(idx++, entry);
-    }
-};
-
-Napi::Array Parser::schema(Napi::Env& env) {
-    Napi::Array result = Napi::Array::New(env);
-    MessageSchemaGen gen{env, result};
-    comms::util::tupleForEachType<AllInMessages>(gen);
     return result;
 }

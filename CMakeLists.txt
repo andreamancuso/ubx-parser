@@ -11,7 +11,7 @@ if(MSVC AND CMAKE_JS_NODELIB_DEF AND CMAKE_JS_NODELIB_TARGET)
 endif()
 
 include_directories(${CMAKE_JS_INC})
-file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp")
+file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp" "schema.cpp")
 
 if(MSVC)
     add_compile_options(/bigobj)

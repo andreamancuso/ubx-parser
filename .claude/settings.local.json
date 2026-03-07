@@ -9,7 +9,8 @@
       "Bash(echo === MESSAGES WITH SUFFIXES ===:*)",
       "Bash(echo === SUFFIX PATTERN BREAKDOWN ===:*)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:nodejs.github.io)"
+      "WebFetch(domain:nodejs.github.io)",
+      "Bash(wc:*)"
     ]
   }
 }

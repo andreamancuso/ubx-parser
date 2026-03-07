@@ -27,8 +27,6 @@ public:
 
     Napi::Array parse(const std::vector<uint8_t>& bytes);
 
-    static Napi::Array schema(Napi::Env& env);
-
 private:
     Frame m_frame;
     Napi::Env* m_env;

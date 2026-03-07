@@ -1,5 +1,6 @@
 #include <napi.h>
 #include "parser.h"
+#include "schema.h"
 
 static Napi::Value Parse(const Napi::CallbackInfo& info) {
   if (info.Length() != 1) {
@@ -32,7 +33,7 @@ static Napi::Value Parse(const Napi::CallbackInfo& info) {
 
 static Napi::Value Schema(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
-  return Parser::schema(env);
+  return ubxSchema(env);
 }
 
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
