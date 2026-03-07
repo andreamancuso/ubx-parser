@@ -63,18 +63,21 @@ Napi::Value UbxLog::Open(const Napi::CallbackInfo& info) {
     return deferred.Promise();
 }
 
-void UbxLog::ensureOpen(Napi::Env env) {
+bool UbxLog::ensureOpen(Napi::Env env) {
     if (m_closed) {
         Napi::Error::New(env, "UbxLog is closed").ThrowAsJavaScriptException();
+        return false;
     }
     if (!m_ready) {
         Napi::Error::New(env, "UbxLog is not ready").ThrowAsJavaScriptException();
+        return false;
     }
+    return true;
 }
 
 Napi::Value UbxLog::Count(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    ensureOpen(env);
+    if (!ensureOpen(env)) return env.Undefined();
 
     if (info.Length() >= 1 && info[0].IsString()) {
         std::string name = info[0].As<Napi::String>().Utf8Value();
@@ -85,7 +88,7 @@ Napi::Value UbxLog::Count(const Napi::CallbackInfo& info) {
 
 Napi::Value UbxLog::MessageTypes(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    ensureOpen(env);
+    if (!ensureOpen(env)) return env.Undefined();
 
     auto types = m_db->messageTypes();
     Napi::Array result = Napi::Array::New(env, types.size());
@@ -97,7 +100,7 @@ Napi::Value UbxLog::MessageTypes(const Napi::CallbackInfo& info) {
 
 Napi::Value UbxLog::Next(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    ensureOpen(env);
+    if (!ensureOpen(env)) return env.Undefined();
 
     MessageEntry entry;
     bool found;
@@ -119,7 +122,7 @@ Napi::Value UbxLog::Next(const Napi::CallbackInfo& info) {
 
 Napi::Value UbxLog::Prev(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    ensureOpen(env);
+    if (!ensureOpen(env)) return env.Undefined();
 
     MessageEntry entry;
     bool found;
@@ -141,7 +144,7 @@ Napi::Value UbxLog::Prev(const Napi::CallbackInfo& info) {
 
 Napi::Value UbxLog::Seek(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    ensureOpen(env);
+    if (!ensureOpen(env)) return env.Undefined();
 
     if (info.Length() < 1 || !info[0].IsNumber()) {
         Napi::TypeError::New(env, "Expected position number").ThrowAsJavaScriptException();
@@ -163,7 +166,7 @@ Napi::Value UbxLog::Seek(const Napi::CallbackInfo& info) {
 
 Napi::Value UbxLog::Get(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    ensureOpen(env);
+    if (!ensureOpen(env)) return env.Undefined();
 
     if (info.Length() < 2 || !info[0].IsString() || !info[1].IsNumber()) {
         Napi::TypeError::New(env, "Expected (name: string, ordinal: number)").ThrowAsJavaScriptException();

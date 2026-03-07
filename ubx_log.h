@@ -31,7 +31,7 @@ private:
     // Deep-parse: read frame bytes from file and decode via Parser
     Napi::Value deepParseAt(Napi::Env env, const MessageEntry& entry);
 
-    void ensureOpen(Napi::Env env);
+    bool ensureOpen(Napi::Env env);
 
     std::unique_ptr<IndexDb> m_db;
     std::ifstream m_file;
