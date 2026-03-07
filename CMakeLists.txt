@@ -14,21 +14,28 @@ include_directories(${CMAKE_JS_INC})
 file(GLOB SOURCE_FILES "ubx.cc" "parser.cpp" "schema.cpp"
      "ubx_log.cpp" "index_worker.cpp" "shallow_parser.cpp" "index_db.cpp")
 
-# SQLite amalgamation (compiled as C, vendored in deps/sqlite3/)
-set(SQLITE_SRC ${DEPS}/sqlite3/sqlite3.c)
-set_source_files_properties(${SQLITE_SRC} PROPERTIES LANGUAGE C)
+# SQLite amalgamation — separate C library to avoid C++ PCH conflicts
+add_library(sqlite3_lib STATIC ${DEPS}/sqlite3/sqlite3.c)
+target_include_directories(sqlite3_lib PRIVATE ${DEPS}/sqlite3)
+target_compile_definitions(sqlite3_lib PRIVATE
+    SQLITE_THREADSAFE=0
+    SQLITE_OMIT_LOAD_EXTENSION=1
+)
+if(MSVC)
+    target_compile_options(sqlite3_lib PRIVATE /W0)
+else()
+    target_compile_options(sqlite3_lib PRIVATE -w)
+    set_target_properties(sqlite3_lib PROPERTIES POSITION_INDEPENDENT_CODE ON)
+endif()
 
 if(MSVC)
     add_compile_options(/bigobj)
     string(REPLACE "/O2" "/O1" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-    set_source_files_properties(${SQLITE_SRC} PROPERTIES COMPILE_FLAGS "/W0")
-else()
-    set_source_files_properties(${SQLITE_SRC} PROPERTIES COMPILE_FLAGS "-w")
 endif()
 if(NOT MSVC)
     add_link_options("$<$<CONFIG:Release>:-s>")
 endif()
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${SQLITE_SRC} ${CMAKE_JS_SRC})
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     PREFIX "" SUFFIX ".node"
     CXX_VISIBILITY_PRESET hidden
@@ -38,7 +45,7 @@ if(NOT MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE -ffunction-sections -fdata-sections)
     target_link_options(${PROJECT_NAME} PRIVATE "$<$<PLATFORM_ID:Linux>:-Wl,--gc-sections>")
 endif()
-target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB})
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} sqlite3_lib)
 
 # Include Node-API wrappers
 execute_process(COMMAND node -p "require('node-addon-api').include"
@@ -54,12 +61,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${DEPS}/comms/include
         ${DEPS}/cc.ublox.generated/include
         ${DEPS}/sqlite3
-)
-
-# SQLite compile definitions
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-        SQLITE_THREADSAFE=0
-        SQLITE_OMIT_LOAD_EXTENSION=1
 )
 
 # define NAPI_VERSION
