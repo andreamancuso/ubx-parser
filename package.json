@@ -45,8 +45,8 @@
   "scripts": {
     "build:prebuild:win32-x64": "npx rimraf build && cmake-js rebuild && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-x64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-x64/node.napi.node');\"",
     "build:prebuild:win32-arm64": "npx rimraf build && cmake-js rebuild --arch arm64 && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-arm64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-arm64/node.napi.node');\"",
-    "compile": "cmake-js compile",
-    "rebuild": "cmake-js rebuild",
+    "compile": "npx rimraf build && cmake-js compile",
+    "rebuild": "npx rimraf build && cmake-js rebuild",
     "test": "node index.js",
     "generate-types": "node scripts/generate-types.js"
   }
