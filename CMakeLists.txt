@@ -29,7 +29,7 @@ else()
 endif()
 
 if(MSVC)
-    add_compile_options(/bigobj)
+    add_compile_options(/bigobj /MP)
     string(REPLACE "/O2" "/O1" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
 if(NOT MSVC)
@@ -68,7 +68,7 @@ add_definitions(-DNAPI_VERSION=9)
 
 # Precompiled headers for heavy comms/ublox headers (disable on memory-constrained CI)
 option(UBX_USE_PCH "Use precompiled headers" ON)
-if(UBX_USE_PCH AND NOT MSVC)
+if(UBX_USE_PCH)
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         <napi.h>
         <vector>
