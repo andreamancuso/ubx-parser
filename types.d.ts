@@ -664,6 +664,7 @@ export interface NavSig {
     sigId: number;
     freqId: number;
     prRes: number;
+    cno: number;
     qualityInd: number;
     corrSource: number;
     ionoModel: number;
