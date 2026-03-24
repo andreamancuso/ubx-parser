@@ -58,10 +58,20 @@ private:
         return Napi::Number::New(env, static_cast<double>(static_cast<Underlying>(field.getValue())));
     }
 
-    // Bitmask fields
+    // Bitmask fields — expand named bits into an object
     template <typename TField>
     Napi::Value toJs(TField& field, comms::field::tag::Bitmask) {
-        return Napi::Number::New(env, static_cast<double>(field.getValue()));
+        using F = std::decay_t<TField>;
+        constexpr auto numBits = static_cast<unsigned>(F::BitIdx_numOfValues);
+        Napi::Object nested = Napi::Object::New(env);
+        for (unsigned i = 0; i < numBits; ++i) {
+            const char* bn = F::bitName(i);
+            if (bn && bn[0] != '\0') {
+                nested.Set(Napi::String::New(env, bn),
+                           Napi::Boolean::New(env, field.getBitValue(i)));
+            }
+        }
+        return nested;
     }
 
     // Float fields

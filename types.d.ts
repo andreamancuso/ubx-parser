@@ -31,7 +31,12 @@ export interface NavStatus {
   name: "NAV-STATUS";
   iTOW: number;
   gpsFix: number;
-  flags: number;
+  flags: {
+    gpsFixOk: boolean;
+    diffSoln: boolean;
+    wknSet: boolean;
+    towSet: boolean;
+  };
   fixStat: {
     diffCorr: boolean;
     carrSolnValid: boolean;
@@ -88,7 +93,12 @@ export interface NavSol {
   fTOW: number;
   week: number;
   gpsFix: number;
-  flags: number;
+  flags: {
+    GPSfixOK: boolean;
+    DiffSoln: boolean;
+    WKNSET: boolean;
+    TOWSET: boolean;
+  };
   ecefX: number;
   ecefY: number;
   ecefZ: number;
@@ -116,7 +126,12 @@ export interface NavPvtUblox89 {
   hour: number;
   min: number;
   sec: number;
-  valid: number;
+  valid: {
+    validDate: boolean;
+    validTime: boolean;
+    fullyResolved: boolean;
+    validMag: boolean;
+  };
   tAcc: number;
   nano: number;
   fixType: number;
@@ -127,7 +142,11 @@ export interface NavPvtUblox89 {
     headVehValid: boolean;
     carrSoln: number;
   };
-  flags2: number;
+  flags2: {
+    confirmedAvai: boolean;
+    confirmedDate: boolean;
+    confirmedTime: boolean;
+  };
   numSV: number;
   lon: number;
   lat: number;
@@ -143,7 +162,9 @@ export interface NavPvtUblox89 {
   sAcc: number;
   headingAcc: number;
   pDop: number;
-  flags3: number;
+  flags3: {
+    invalidLlh: boolean;
+  };
   reserved2: number;
   reserved3: number;
   headVeh: number;
@@ -159,7 +180,12 @@ export interface NavPvt {
   hour: number;
   min: number;
   sec: number;
-  valid: number;
+  valid: {
+    validDate: boolean;
+    validTime: boolean;
+    fullyResolved: boolean;
+    validMag: boolean;
+  };
   tAcc: number;
   nano: number;
   fixType: number;
@@ -170,7 +196,11 @@ export interface NavPvt {
     headVehValid: boolean;
     carrSoln: number;
   };
-  flags2: number;
+  flags2: {
+    confirmedAvai: boolean;
+    confirmedDate: boolean;
+    confirmedTime: boolean;
+  };
   numSV: number;
   lon: number;
   lat: number;
@@ -186,7 +216,9 @@ export interface NavPvt {
   sAcc: number;
   headingAcc: number;
   pDop: number;
-  flags3: number;
+  flags3: {
+    invalidLlh: boolean;
+  };
   reserved2: number;
   reserved3: number;
 }
@@ -249,7 +281,9 @@ export interface NavHpposecef {
   ecefXHp: number;
   ecefYHp: number;
   ecefZHp: number;
-  flags: number;
+  flags: {
+    invalidEcef: boolean;
+  };
   pAcc: number;
 }
 export interface NavHpposecefPoll {
@@ -260,7 +294,9 @@ export interface NavHpposllh {
   name: "NAV-HPPOSLLH";
   version: number;
   reserved1: number;
-  flags: number;
+  flags: {
+    invalidLlh: boolean;
+  };
   iTOW: number;
   lon: number;
   lat: number;
@@ -283,7 +319,11 @@ export interface NavTimegps {
   fTOW: number;
   weeks: number;
   leapS: number;
-  valid: number;
+  valid: {
+    towValid: boolean;
+    weekValid: boolean;
+    leapSValid: boolean;
+  };
   tAcc: number;
 }
 export interface NavTimegpsPoll {
@@ -331,7 +371,10 @@ export interface NavTimeglo {
   fTOD: number;
   Nt: number;
   N4: number;
-  valid: number;
+  valid: {
+    todValid: boolean;
+    dateValid: boolean;
+  };
   tAcc: number;
 }
 export interface NavTimegloPoll {
@@ -345,7 +388,11 @@ export interface NavTimebds {
   fSOW: number;
   week: number;
   leapS: number;
-  valid: number;
+  valid: {
+    sowValid: boolean;
+    weekValid: boolean;
+    leapSValid: boolean;
+  };
   tAcc: number;
 }
 export interface NavTimebdsPoll {
@@ -359,7 +406,11 @@ export interface NavTimegal {
   fGalTow: number;
   galWno: number;
   leapS: number;
-  valid: number;
+  valid: {
+    galTowValid: boolean;
+    galWnoValid: boolean;
+    leapSValid: boolean;
+  };
   tAcc: number;
 }
 export interface NavTimegalPoll {
@@ -379,7 +430,10 @@ export interface NavTimels {
   dateOfLsGpsWn: number;
   dateOfLsGpsDn: number;
   reserved2: number;
-  valid: number;
+  valid: {
+    validCurrLs: boolean;
+    validTimeToLsEvent: boolean;
+  };
 }
 export interface NavTimelsPoll {
   name: "NAV-TIMELS";
@@ -397,7 +451,16 @@ export interface NavSvinfo {
   list: Array<{
     chn: number;
     svid: number;
-    flags: number;
+    flags: {
+      svUsed: boolean;
+      diffCorr: boolean;
+      orbitAvail: boolean;
+      orbitEph: boolean;
+      unhealthy: boolean;
+      orbitAlm: boolean;
+      orbitAop: boolean;
+      smoothed: boolean;
+    };
     quality: number;
     cno: number;
     elev: number;
@@ -439,7 +502,13 @@ export interface NavSbas {
   geo: number;
   mode: number;
   sys: number;
-  service: number;
+  service: {
+    Ranging: boolean;
+    Corrections: boolean;
+    Integrity: boolean;
+    Testmode: boolean;
+    Bad: boolean;
+  };
   cnt: number;
   reserved1: number;
   list: Array<{
@@ -447,7 +516,13 @@ export interface NavSbas {
     flags: number;
     udre: number;
     svSys: number;
-    svService: number;
+    svService: {
+      Ranging: boolean;
+      Corrections: boolean;
+      Integrity: boolean;
+      Testmode: boolean;
+      Bad: boolean;
+    };
     reserved2: number;
     prc: number;
     reserved3: number;
@@ -638,7 +713,11 @@ export interface NavSlas {
   gmsLat: number;
   gmsCode: number;
   qzssSvId: number;
-  serviceFlags: number;
+  serviceFlags: {
+    gmsAvailable: boolean;
+    qzssSvAvailable: boolean;
+    testMode: boolean;
+  };
   cnt: number;
   list: Array<{
     gnssId: number;
@@ -670,7 +749,15 @@ export interface NavSig {
     ionoModel: number;
     sigFlags: {
       health: number;
-      bits: number;
+      bits: {
+        prSmoothed: boolean;
+        prUsed: boolean;
+        crUsed: boolean;
+        doUsed: boolean;
+        prCorrUsed: boolean;
+        crCorrUsed: boolean;
+        doCorrUsed: boolean;
+      };
     };
     reserved1: number;
   }>;
@@ -682,7 +769,9 @@ export interface NavSigPoll {
 export interface NavAopstatus {
   name: "NAV-AOPSTATUS";
   iTOW: number;
-  aopCfg: number;
+  aopCfg: {
+    useAOP: boolean;
+  };
   status: number;
   reserved0: number;
   reserved1: number;
@@ -694,7 +783,9 @@ export interface NavAopstatusUblox8 {
   name: "NAV-AOPSTATUS";
   variant: "ublox-8";
   iTOW: number;
-  aopCfg: number;
+  aopCfg: {
+    useAOP: boolean;
+  };
   status: number;
   reserved1: number;
   reserved2: number;
@@ -791,7 +882,10 @@ export interface RxmRawx {
   week: number;
   leapS: number;
   numMeas: number;
-  recStat: number;
+  recStat: {
+    leapSec: boolean;
+    clkReset: boolean;
+  };
   version: number;
   reserved1: number;
   list: Array<{
@@ -807,7 +901,12 @@ export interface RxmRawx {
     prStdev: number;
     cpStdev: number;
     doStdev: number;
-    trkStat: number;
+    trkStat: {
+      prValid: boolean;
+      cpValid: boolean;
+      halfCyc: boolean;
+      subHalfCyc: boolean;
+    };
     reserved3: number;
   }>;
 }
@@ -889,13 +988,23 @@ export interface RxmPmreqV0 {
   version: number;
   reserved1: number;
   duration: number;
-  flags: number;
-  wakeupSources: number;
+  flags: {
+    backup: boolean;
+    force: boolean;
+  };
+  wakeupSources: {
+    uartrx: boolean;
+    extint0: boolean;
+    extint1: boolean;
+    spics: boolean;
+  };
 }
 export interface RxmPmreq {
   name: "RXM-PMREQ";
   duration: number;
-  flags: number;
+  flags: {
+    backup: boolean;
+  };
 }
 export interface RxmRlmLong {
   name: "RXM-RLM";
@@ -940,7 +1049,9 @@ export interface RxmImes {
     };
     position1_2: {
       pos1Lon: number;
-      flags: number;
+      flags: {
+        pos1Valid: boolean;
+      };
     };
     position2_1: {
       pos2Floor: number;
@@ -956,7 +1067,11 @@ export interface RxmImes {
       shortBoundary: boolean;
     };
     mediumIdLSB: number;
-    mediumId_2: number;
+    mediumId_2: {
+      mediumIdMSB: boolean;
+      mediumValid: boolean;
+      mediumboundary: boolean;
+    };
   }>;
 }
 export interface RxmImesPoll {
@@ -1008,9 +1123,20 @@ export interface CfgPrtDdc {
     reservedHigh: number;
   };
   reserved2: number;
-  inProtoMask: number;
-  outProtoMask: number;
-  cfgPrtFlags: number;
+  inProtoMask: {
+    inUbx: boolean;
+    inNmea: boolean;
+    inRtcm: boolean;
+    inRtcm3: boolean;
+  };
+  outProtoMask: {
+    outUbx: boolean;
+    outNmea: boolean;
+    outRtcm3: boolean;
+  };
+  cfgPrtFlags: {
+    extendedTxTimeout: boolean;
+  };
   reserved3: number;
 }
 export interface CfgPrtUart {
@@ -1033,9 +1159,20 @@ export interface CfgPrtUart {
     reservedHigh: number;
   };
   baudRate: number;
-  inProtoMask: number;
-  outProtoMask: number;
-  cfgPrtFlags: number;
+  inProtoMask: {
+    inUbx: boolean;
+    inNmea: boolean;
+    inRtcm: boolean;
+    inRtcm3: boolean;
+  };
+  outProtoMask: {
+    outUbx: boolean;
+    outNmea: boolean;
+    outRtcm3: boolean;
+  };
+  cfgPrtFlags: {
+    extendedTxTimeout: boolean;
+  };
   reserved2: number;
 }
 export interface CfgPrtUsb {
@@ -1050,9 +1187,20 @@ export interface CfgPrtUsb {
     thres: number;
   };
   reserved2: number;
-  inProtoMask: number;
-  outProtoMask: number;
-  cfgPrtFlags: number;
+  inProtoMask: {
+    inUbx: boolean;
+    inNmea: boolean;
+    inRtcm: boolean;
+    inRtcm3: boolean;
+  };
+  outProtoMask: {
+    outUbx: boolean;
+    outNmea: boolean;
+    outRtcm3: boolean;
+  };
+  cfgPrtFlags: {
+    extendedTxTimeout: boolean;
+  };
   reserved3: number;
   reserved4: number;
 }
@@ -1075,9 +1223,20 @@ export interface CfgPrtSpi {
     reservedHigh: number;
   };
   reserved2: number;
-  inProtoMask: number;
-  outProtoMask: number;
-  cfgPrtFlags: number;
+  inProtoMask: {
+    inUbx: boolean;
+    inNmea: boolean;
+    inRtcm: boolean;
+    inRtcm3: boolean;
+  };
+  outProtoMask: {
+    outUbx: boolean;
+    outNmea: boolean;
+    outRtcm3: boolean;
+  };
+  cfgPrtFlags: {
+    extendedTxTimeout: boolean;
+  };
   reserved3: number;
 }
 export interface CfgPrtPortPoll {
@@ -1109,7 +1268,13 @@ export interface CfgInf {
   name: "CFG-INF";
   protocolId: number;
   reserved1: number;
-  infMsgMask: Array<number>;
+  infMsgMask: Array<{
+    ERROR: boolean;
+    WARNING: boolean;
+    NOTICE: boolean;
+    TEST: boolean;
+    DEBUG: boolean;
+  }>;
 }
 export interface CfgInfPoll {
   name: "CFG-INF";
@@ -1117,7 +1282,18 @@ export interface CfgInfPoll {
 }
 export interface CfgRst {
   name: "CFG-RST";
-  navBbrMask: number;
+  navBbrMask: {
+    eph: boolean;
+    alm: boolean;
+    health: boolean;
+    klob: boolean;
+    pos: boolean;
+    clkd: boolean;
+    osc: boolean;
+    utc: boolean;
+    rtc: boolean;
+    aop: boolean;
+  };
   resetMode: number;
   reserved1: number;
 }
@@ -1163,7 +1339,9 @@ export interface CfgTp {
   length: number;
   status: number;
   timeRef: number;
-  flags: number;
+  flags: {
+    syncMode: boolean;
+  };
   res: number;
   antennaCableDelay: number;
   rfGroupDelay: number;
@@ -1185,14 +1363,56 @@ export interface CfgRatePoll {
 }
 export interface CfgCfg {
   name: "CFG-CFG";
-  clearMask: number;
-  saveMask: number;
-  loadMask: number;
-  deviceMask: number | null;
+  clearMask: {
+    ioPort: boolean;
+    msgConf: boolean;
+    infMsg: boolean;
+    navConf: boolean;
+    rxmConf: boolean;
+    senConf: boolean;
+    rinvConf: boolean;
+    antConf: boolean;
+    logConf: boolean;
+    ftsConf: boolean;
+  };
+  saveMask: {
+    ioPort: boolean;
+    msgConf: boolean;
+    infMsg: boolean;
+    navConf: boolean;
+    rxmConf: boolean;
+    senConf: boolean;
+    rinvConf: boolean;
+    antConf: boolean;
+    logConf: boolean;
+    ftsConf: boolean;
+  };
+  loadMask: {
+    ioPort: boolean;
+    msgConf: boolean;
+    infMsg: boolean;
+    navConf: boolean;
+    rxmConf: boolean;
+    senConf: boolean;
+    rinvConf: boolean;
+    antConf: boolean;
+    logConf: boolean;
+    ftsConf: boolean;
+  };
+  deviceMask: {
+    devBBR: boolean;
+    devFlash: boolean;
+    devEEPROM: boolean;
+    devSpiFlash: boolean;
+  } | null;
 }
 export interface CfgFxn {
   name: "CFG-FXN";
-  flags: number;
+  flags: {
+    sleep: boolean;
+    absAlign: boolean;
+    onOff: boolean;
+  };
   tReacq: number;
   tAcq: number;
   tReacqOff: number;
@@ -1218,9 +1438,22 @@ export interface CfgRxmPoll {
 export interface CfgEkf {
   name: "CFG-EKF";
   disableEkf: number;
-  actionFlags: number;
-  configFlags: number;
-  inverseFlags: number;
+  actionFlags: {
+    clTab: boolean;
+    clCalib: boolean;
+    nomTacho: boolean;
+    nomGyro: boolean;
+    setTemp: boolean;
+    dir: boolean;
+  };
+  configFlags: {
+    pulsesPerM: boolean;
+    useSerWt: boolean;
+  };
+  inverseFlags: {
+    invDir: boolean;
+    invGyro: boolean;
+  };
   reserved2: number;
   nomPPDist: number;
   nomZero: number;
@@ -1234,7 +1467,13 @@ export interface CfgEkfPoll {
 }
 export interface CfgAnt {
   name: "CFG-ANT";
-  flags: number;
+  flags: {
+    svcs: boolean;
+    scd: boolean;
+    ocd: boolean;
+    pdwnOnSCD: boolean;
+    recovery: boolean;
+  };
   pins: {
     pinSwitch: number;
     pinSCD: number;
@@ -1248,11 +1487,59 @@ export interface CfgAntPoll {
 }
 export interface CfgSbas {
   name: "CFG-SBAS";
-  mode: number;
-  usage: number;
+  mode: {
+    enabled: boolean;
+    test: boolean;
+  };
+  usage: {
+    range: boolean;
+    diffCorr: boolean;
+    integrity: boolean;
+  };
   maxSBAS: number;
-  scanmode2: number;
-  scanmode1: number;
+  scanmode2: {
+    PRN152: boolean;
+    PRN153: boolean;
+    PRN154: boolean;
+    PRN155: boolean;
+    PRN156: boolean;
+    PRN157: boolean;
+    PRN158: boolean;
+  };
+  scanmode1: {
+    PRN120: boolean;
+    PRN121: boolean;
+    PRN122: boolean;
+    PRN123: boolean;
+    PRN124: boolean;
+    PRN125: boolean;
+    PRN126: boolean;
+    PRN127: boolean;
+    PRN128: boolean;
+    PRN129: boolean;
+    PRN130: boolean;
+    PRN131: boolean;
+    PRN132: boolean;
+    PRN133: boolean;
+    PRN134: boolean;
+    PRN135: boolean;
+    PRN136: boolean;
+    PRN137: boolean;
+    PRN138: boolean;
+    PRN139: boolean;
+    PRN140: boolean;
+    PRN141: boolean;
+    PRN142: boolean;
+    PRN143: boolean;
+    PRN144: boolean;
+    PRN145: boolean;
+    PRN146: boolean;
+    PRN147: boolean;
+    PRN148: boolean;
+    PRN149: boolean;
+    PRN150: boolean;
+    PRN151: boolean;
+  };
 }
 export interface CfgSbasPoll {
   name: "CFG-SBAS";
@@ -1261,11 +1548,29 @@ export interface CfgSbasPoll {
 export interface CfgNmeaV1 {
   name: "CFG-NMEA";
   variant: "V1";
-  filter: number;
+  filter: {
+    posFilt: boolean;
+    mskPosFilt: boolean;
+    timeFilt: boolean;
+    dateFilt: boolean;
+    gpsOnlyFilter: boolean;
+    trackFilt: boolean;
+  };
   nmeaVersion: number;
   numSV: number;
-  flags: number;
-  gnssToFilter: number;
+  flags: {
+    compat: boolean;
+    consider: boolean;
+    limit82: boolean;
+    highPrec: boolean;
+  };
+  gnssToFilter: {
+    gps: boolean;
+    sbas: boolean;
+    qzss: boolean;
+    glonass: boolean;
+    beidou: boolean;
+  };
   svNumbering: number;
   mainTalkerId: number;
   gsvTalkerId: number;
@@ -1276,11 +1581,29 @@ export interface CfgNmeaV1 {
 export interface CfgNmeaV0 {
   name: "CFG-NMEA";
   variant: "V0";
-  filter: number;
+  filter: {
+    posFilt: boolean;
+    mskPosFilt: boolean;
+    timeFilt: boolean;
+    dateFilt: boolean;
+    gpsOnlyFilter: boolean;
+    trackFilt: boolean;
+  };
   nmeaVersion: number;
   numSV: number;
-  flags: number;
-  gnssToFilter: number;
+  flags: {
+    compat: boolean;
+    consider: boolean;
+    limit82: boolean;
+    highPrec: boolean;
+  };
+  gnssToFilter: {
+    gps: boolean;
+    sbas: boolean;
+    qzss: boolean;
+    glonass: boolean;
+    beidou: boolean;
+  };
   svNumbering: number;
   mainTalkerId: number;
   gsvTalkerId: number;
@@ -1288,10 +1611,22 @@ export interface CfgNmeaV0 {
 }
 export interface CfgNmea {
   name: "CFG-NMEA";
-  filter: number;
+  filter: {
+    posFilt: boolean;
+    mskPosFilt: boolean;
+    timeFilt: boolean;
+    dateFilt: boolean;
+    gpsOnlyFilter: boolean;
+    trackFilt: boolean;
+  };
   nmeaVersion: number;
   numSV: number;
-  flags: number;
+  flags: {
+    compat: boolean;
+    consider: boolean;
+    limit82: boolean;
+    highPrec: boolean;
+  };
 }
 export interface CfgNmeaPoll {
   name: "CFG-NMEA";
@@ -1304,7 +1639,10 @@ export interface CfgUsb {
   reserved1: number;
   reserved2: number;
   powerConsumption: number;
-  flags: number;
+  flags: {
+    reEnum: boolean;
+    powerMode: boolean;
+  };
   vendorString: string;
   productString: string;
   serialNumber: string;
@@ -1331,7 +1669,12 @@ export interface CfgOdo {
   name: "CFG-ODO";
   version: number;
   reserved1: number;
-  flags: number;
+  flags: {
+    useODO: boolean;
+    useCOG: boolean;
+    outLPVel: boolean;
+    outLPCog: boolean;
+  };
   odoCfg: {
     profile: number;
     reserved: number;
@@ -1350,16 +1693,41 @@ export interface CfgOdoPoll {
 }
 export interface CfgNvs {
   name: "CFG-NVS";
-  clearMask: number;
-  saveMask: number;
-  loadMask: number;
-  deviceMask: number;
+  clearMask: {
+    alm: boolean;
+    aop: boolean;
+  };
+  saveMask: {
+    alm: boolean;
+    aop: boolean;
+  };
+  loadMask: {
+    alm: boolean;
+    aop: boolean;
+  };
+  deviceMask: {
+    devBBR: boolean;
+    devFlash: boolean;
+    devEEPROM: boolean;
+    devSpiFlash: boolean;
+  };
 }
 export interface CfgNavx5 {
   name: "CFG-NAVX5";
   version: number;
-  mask1: number;
-  mask2: number;
+  mask1: {
+    minMax: boolean;
+    minCno: boolean;
+    initial3dfix: boolean;
+    wknRoll: boolean;
+    ackAid: boolean;
+    ppp: boolean;
+    aop: boolean;
+  };
+  mask2: {
+    adr: boolean;
+    sigAttenComp: boolean;
+  };
   reserved1: number;
   minSVs: number;
   maxSVs: number;
@@ -1374,7 +1742,9 @@ export interface CfgNavx5 {
   reserved5: number;
   reserved6: number;
   usePPP: number;
-  aopCfg: number;
+  aopCfg: {
+    useAOP: boolean;
+  };
   reserved7: number;
   aopOrbMaxErr: number;
   reserved8: number;
@@ -1386,8 +1756,19 @@ export interface CfgNavx5 {
 export interface CfgNavx5 {
   name: "CFG-NAVX5";
   version: number;
-  mask1: number;
-  mask2: number;
+  mask1: {
+    minMax: boolean;
+    minCno: boolean;
+    initial3dfix: boolean;
+    wknRoll: boolean;
+    ackAid: boolean;
+    ppp: boolean;
+    aop: boolean;
+  };
+  mask2: {
+    adr: boolean;
+    sigAttenComp: boolean;
+  };
   reserved1: number;
   minSVs: number;
   maxSVs: number;
@@ -1402,7 +1783,9 @@ export interface CfgNavx5 {
   reserved5: number;
   reserved6: number;
   usePPP: number;
-  aopCfg: number;
+  aopCfg: {
+    useAOP: boolean;
+  };
   reserved7: number;
   aopOrbMaxErr: number;
   reserved8: number;
@@ -1412,8 +1795,19 @@ export interface CfgNavx5 {
 export interface CfgNavx5 {
   name: "CFG-NAVX5";
   version: number;
-  mask1: number;
-  mask2: number;
+  mask1: {
+    minMax: boolean;
+    minCno: boolean;
+    initial3dfix: boolean;
+    wknRoll: boolean;
+    ackAid: boolean;
+    ppp: boolean;
+    aop: boolean;
+  };
+  mask2: {
+    adr: boolean;
+    sigAttenComp: boolean;
+  };
   reserved1: number;
   minSVs: number;
   maxSVs: number;
@@ -1425,7 +1819,9 @@ export interface CfgNavx5 {
   wknRollover: number;
   reserved4: number;
   usePPP: number;
-  aopCfg: number;
+  aopCfg: {
+    useAOP: boolean;
+  };
   reserved5: number;
   aopOrbMaxErr: number;
   reserved6: number;
@@ -1438,7 +1834,18 @@ export interface CfgNavx5Poll {
 }
 export interface CfgNav5 {
   name: "CFG-NAV5";
-  mask: number;
+  mask: {
+    dyn: boolean;
+    minEl: boolean;
+    posFixMode: boolean;
+    drLim: boolean;
+    posMask: boolean;
+    timeMask: boolean;
+    staticHoldMask: boolean;
+    dgpsMask: boolean;
+    cnoThreshold: boolean;
+    utc: boolean;
+  };
   dynModel: number;
   fixMode: number;
   fixedAlt: number;
@@ -1479,7 +1886,15 @@ export interface CfgTp5 {
   ratioLock: number | null;
   userConfigDelay: number;
   flags: {
-    bits: number;
+    bits: {
+      active: boolean;
+      lockGnssFreq: boolean;
+      lockedOtherSet: boolean;
+      isFreq: boolean;
+      isLength: boolean;
+      alignToTow: boolean;
+      polarity: boolean;
+    };
     gridUtcGnss: number;
     syncMode: number;
     reserved: number;
@@ -1503,9 +1918,17 @@ export interface CfgPm {
   flags: {
     res1: number;
     internal: number;
-    bitsMid: number;
+    bitsMid: {
+      extintSelect: boolean;
+      extintWake: boolean;
+      extintBackup: boolean;
+    };
     limitPeakCurr: number;
-    bitsHigh: number;
+    bitsHigh: {
+      WaitTimeFix: boolean;
+      updateRTC: boolean;
+      updateEPH: boolean;
+    };
   };
   updatePeriod: number;
   searchPeriod: number;
@@ -1519,7 +1942,10 @@ export interface CfgPmPoll {
 }
 export interface CfgRinv {
   name: "CFG-RINV";
-  flags: number;
+  flags: {
+    dump: boolean;
+    binary: boolean;
+  };
   data: Buffer;
 }
 export interface CfgRinvPoll {
@@ -1532,12 +1958,16 @@ export interface CfgItfm {
     bbThreshold: number;
     cwThreshold: number;
     algorithmBits: number;
-    bits: number;
+    bits: {
+      enable: boolean;
+    };
   };
   config2: {
     generalBits: number;
     antSetting: number;
-    bitsHigh: number;
+    bitsHigh: {
+      enable2: boolean;
+    };
   };
 }
 export interface CfgItfmPoll {
@@ -1606,7 +2036,10 @@ export interface CfgTmode2 {
   name: "CFG-TMODE2";
   timeMode: number;
   reserved1: number;
-  flags: number;
+  flags: {
+    lla: boolean;
+    altInv: boolean;
+  };
   ecefX: number | null;
   lat: number | null;
   ecefY: number | null;
@@ -1646,7 +2079,11 @@ export interface CfgGnssPoll {
 export interface CfgLogfilter {
   name: "CFG-LOGFILTER";
   version: number;
-  flags: number;
+  flags: {
+    recordEnabled: boolean;
+    psmOncePerWakupEnabled: boolean;
+    applyAllFilterSettings: boolean;
+  };
   minInterval: number;
   timeThreshold: number;
   speedThreshold: number;
@@ -1659,7 +2096,13 @@ export interface CfgLogfilterPoll {
 export interface CfgTxslot {
   name: "CFG-TXSLOT";
   version: number;
-  enable: number;
+  enable: {
+    DDC: boolean;
+    UART1: boolean;
+    UART2: boolean;
+    USB: boolean;
+    SPI: boolean;
+  };
   refTp: number;
   reserved1: number;
   end: Array<number>;
@@ -1687,7 +2130,10 @@ export interface CfgEsrc {
   list: Array<{
     extInt: number;
     sourceType: number;
-    flags: number;
+    flags: {
+      polarity: boolean;
+      gnssUtc: boolean;
+    };
     freq: number;
     reserved2: number;
     withTemp: number;
@@ -1740,7 +2186,12 @@ export interface CfgSmgr {
   reserved1: number;
   freqTolerance: number;
   timeTolerance: number;
-  messageCfg: number;
+  messageCfg: {
+    measInternal: boolean;
+    measGNSS: boolean;
+    measEXTINT0: boolean;
+    measEXTINT1: boolean;
+  };
   maxSlewRate: number;
   flags: {
     disableInternal: boolean;
@@ -1850,7 +2301,11 @@ export interface CfgPmsPoll {
 export interface CfgValset {
   name: "CFG-VALSET";
   version: number;
-  layers: number;
+  layers: {
+    ram: boolean;
+    bbr: boolean;
+    flash: boolean;
+  };
   reserved0: number;
   cfgdata: Array<{
     Key: number;
@@ -1878,7 +2333,10 @@ export interface CfgValgetPoll {
 export interface CfgValdel {
   name: "CFG-VALDEL";
   version: number;
-  layers: number;
+  layers: {
+    bbr: boolean;
+    flash: boolean;
+  };
   transaction: {
     action: number;
     reserved: number;
@@ -2036,7 +2494,9 @@ export interface MonHw2Poll {
 }
 export interface MonRxr {
   name: "MON-RXR";
-  flags: number;
+  flags: {
+    awake: boolean;
+  };
 }
 export interface MonPatch {
   name: "MON-PATCH";
@@ -2060,9 +2520,24 @@ export interface MonPatchPoll {
 export interface MonGnss {
   name: "MON-GNSS";
   version: number;
-  supported: number;
-  defaultGnss: number;
-  enabled: number;
+  supported: {
+    GPSSup: boolean;
+    GlonassSup: boolean;
+    BeidouSup: boolean;
+    GalileoSup: boolean;
+  };
+  defaultGnss: {
+    GPSDef: boolean;
+    GlonassDef: boolean;
+    BeidouDef: boolean;
+    GalileoDef: boolean;
+  };
+  enabled: {
+    GPSEna: boolean;
+    GlonassEna: boolean;
+    BeidouEna: boolean;
+    GalileoEna: boolean;
+  };
   simultaneous: number;
   reserved1: number;
 }
@@ -2086,9 +2561,19 @@ export interface MonSmgr {
     extOscDisc: boolean;
   };
   discSrc: number;
-  gnss: number;
-  extInt0: number;
-  extInt1: number;
+  gnss: {
+    gnssAvail: boolean;
+  };
+  extInt0: {
+    extInt0Avail: boolean;
+    extInt0Type: boolean;
+    extInt0FeedBack: boolean;
+  };
+  extInt1: {
+    extInt1Avail: boolean;
+    extInt1Type: boolean;
+    extInt1FeedBack: boolean;
+  };
 }
 export interface MonSmgrPoll {
   name: "MON-SMGR";
@@ -2116,7 +2601,10 @@ export interface MonComms {
   name: "MON-COMMS";
   version: number;
   nPorts: number;
-  txErrors: number;
+  txErrors: {
+    mem: boolean;
+    alloc: boolean;
+  };
   reserved0: number;
   protIds: Array<number>;
   list: Array<{
@@ -2143,15 +2631,28 @@ export interface MonHw3 {
   name: "MON-HW3";
   version: number;
   nPins: number;
-  flags: number;
+  flags: {
+    rctCalib: boolean;
+    safeBoot: boolean;
+    xtalAbsent: boolean;
+  };
   hwVersion: string;
   reserved0: Buffer;
   list: Array<{
     pinId: number;
     pinMask: {
-      bitsLow: number;
+      bitsLow: {
+        periphPIO: boolean;
+      };
       pinBank: number;
-      bitsHigh: number;
+      bitsHigh: {
+        direction: boolean;
+        value: boolean;
+        vpManager: boolean;
+        pioIrq: boolean;
+        pioPullHigh: boolean;
+        pioPullLow: boolean;
+      };
     };
     VP: number;
     reserved1: number;
@@ -2202,7 +2703,11 @@ export interface AidIni {
   ecefZ: number | null;
   alt: number | null;
   posAcc: number;
-  tmCfg: number;
+  tmCfg: {
+    fEdge: boolean;
+    tm1: boolean;
+    f1: boolean;
+  };
   wno: number | null;
   date: {
     year: number;
@@ -2222,7 +2727,17 @@ export interface AidIni {
   freq: number | null;
   clkDAcc: number | null;
   freqAcc: number | null;
-  flags: number;
+  flags: {
+    pos: boolean;
+    time: boolean;
+    clockD: boolean;
+    tp: boolean;
+    clockF: boolean;
+    lla: boolean;
+    altInv: boolean;
+    prevTm: boolean;
+    utc: boolean;
+  };
 }
 export interface AidIniPoll {
   name: "AID-INI";
@@ -2248,7 +2763,11 @@ export interface AidHui {
   klobB1: number;
   klobB2: number;
   klobB3: number;
-  flags: number;
+  flags: {
+    healthValid: boolean;
+    utcValid: boolean;
+    klobValid: boolean;
+  };
 }
 export interface AidHuiPoll {
   name: "AID-HUI";
@@ -2489,7 +3008,10 @@ export interface TimSmeas {
   reserved2: number;
   list: Array<{
     sourceId: number;
-    flags: number;
+    flags: {
+      freqValid: boolean;
+      phaseValid: boolean;
+    };
     phaseOffsetFrac: number;
     phaseUncFrac: number;
     phaseOffset: number;
@@ -2594,7 +3116,12 @@ export interface EsfStatus {
       reserved: number;
     };
     freq: number;
-    faults: number;
+    faults: {
+      badMeas: boolean;
+      badTTag: boolean;
+      missingMeas: boolean;
+      noisyMeas: boolean;
+    };
   }>;
 }
 export interface EsfStatusPoll {
@@ -3164,7 +3691,9 @@ export interface LogString {
 export interface LogCreate {
   name: "LOG-CREATE";
   version: number;
-  logCfg: number;
+  logCfg: {
+    logCfg: boolean;
+  };
   reserved1: number;
   logSize: number;
   userDefinedSize: number;
@@ -3192,7 +3721,11 @@ export interface LogInfo {
   newestMinute: number;
   newestSecond: number;
   reserved4: number;
-  status: number;
+  status: {
+    recording: boolean;
+    inactive: boolean;
+    circular: boolean;
+  };
   reserved5: number;
 }
 export interface LogInfoPoll {
@@ -3281,13 +3814,18 @@ export interface LogRetrieveposextra {
 export interface LogRetrievebatch {
   name: "LOG-RETRIEVEBATCH";
   version: number;
-  flags: number;
+  flags: {
+    sendMonFirst: boolean;
+  };
   reserved0: number;
 }
 export interface LogBatch {
   name: "LOG-BATCH";
   version: number;
-  contentValid: number;
+  contentValid: {
+    extraPvt: boolean;
+    extraOdo: boolean;
+  };
   msgCount: number;
   iTOW: number;
   year: number;
@@ -3296,12 +3834,18 @@ export interface LogBatch {
   hour: number;
   min: number;
   sec: number;
-  valid: number;
+  valid: {
+    validDate: boolean;
+    validTime: boolean;
+  };
   tAcc: number;
   fracSec: number;
   fixType: number;
   flags: {
-    bitsLow: number;
+    bitsLow: {
+      gnssFixOK: boolean;
+      diffSoln: boolean;
+    };
     psmState: number;
     reserved: number;
   };
@@ -3354,10 +3898,20 @@ export interface HnrPvt {
   hour: number;
   min: number;
   sec: number;
-  valid: number;
+  valid: {
+    validDate: boolean;
+    validTime: boolean;
+    fullyResolved: boolean;
+  };
   nano: number;
   fixType: number;
-  flags: number;
+  flags: {
+    GPSfixOK: boolean;
+    DiffSoln: boolean;
+    WKNSET: boolean;
+    TOWSET: boolean;
+    headVehValid: boolean;
+  };
   reserved1: number;
   lon: number;
   lat: number;

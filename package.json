@@ -1,6 +1,6 @@
 {
   "name": "ubx-parser",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Native Node.js addon for parsing u-blox UBX binary protocol (GNSS/GPS) messages",
   "main": "lib/index.js",
   "types": "types.d.ts",
@@ -45,6 +45,8 @@
   "scripts": {
     "build:prebuild:win32-x64": "npx rimraf build && cmake-js rebuild && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-x64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-x64/node.napi.node');\"",
     "build:prebuild:win32-arm64": "npx rimraf build && cmake-js rebuild --arch arm64 && node -e \"const fs=require('fs');fs.mkdirSync('prebuilds/win32-arm64',{recursive:true});fs.copyFileSync('build/Release/ubx-parser.node','prebuilds/win32-arm64/node.napi.node');\"",
+    "rebuild:prebuild:win32-x64": "npx rimraf build && npm run build:prebuild:win32-x64",
+    "rebuild:prebuild:win32-arm64": "npx rimraf build && npm run build:prebuild:win32-arm64",
     "compile": "cmake-js compile",
     "rebuild": "npx rimraf build && cmake-js rebuild",
     "test": "node index.js",

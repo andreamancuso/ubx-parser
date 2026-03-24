@@ -53,10 +53,20 @@ private:
         return Napi::String::New(env, "number");
     }
 
-    // Bitmask → "number"
+    // Bitmask → object with boolean properties for each named bit
     template <typename TField>
     Napi::Value toSchema(TField&, comms::field::tag::Bitmask) {
-        return Napi::String::New(env, "number");
+        using F = std::decay_t<TField>;
+        constexpr auto numBits = static_cast<unsigned>(F::BitIdx_numOfValues);
+        Napi::Object nested = Napi::Object::New(env);
+        for (unsigned i = 0; i < numBits; ++i) {
+            const char* bn = F::bitName(i);
+            if (bn && bn[0] != '\0') {
+                nested.Set(Napi::String::New(env, bn),
+                           Napi::String::New(env, "boolean"));
+            }
+        }
+        return nested;
     }
 
     // Float → "number"
